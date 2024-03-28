@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { generateFractal, updateFractalPosition } from "../../services/service";
 import CircularProgress from "@mui/material/CircularProgress";
 

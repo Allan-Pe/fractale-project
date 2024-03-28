@@ -3,6 +3,8 @@ package com.example.fractalGenerator
 import com.example.outils.isInMandelbrotSet
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
 
 class FractalGenerator {
     var centerX = 0.0
@@ -66,5 +68,10 @@ class FractalGenerator {
             "zoomout" -> this.scale *= 2
             else -> println("No valid direction !")
         }
+    }
+
+    fun saveFractalasJpeg() {
+        val outputFile = File("fractalTests/fractalimg-r$resolution-s$scale-newImg.jpg")
+        ImageIO.write(image, "jpg", outputFile)
     }
 }
