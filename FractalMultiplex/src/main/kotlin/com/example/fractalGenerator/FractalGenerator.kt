@@ -32,6 +32,8 @@ class FractalGenerator {
             field = value
         }
 
+    var value : Float = 1f;
+
     private val image = BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_RGB)
     fun generateFractal(): BufferedImage {
 
@@ -50,11 +52,16 @@ class FractalGenerator {
     }
 
     fun updateFractalPosition(direction: String) {
+        if (direction == "zoomin"){
+            value /= 2;
+        } else if (direction == "zoomout"){
+            value *= 2;
+        }
         when (direction) {
-            "left" -> this.centerX += 1
-            "right" -> this.centerX -= 1
-            "up" -> this.centerY += 1
-            "down" -> this.centerY -= 1
+            "left" -> this.centerX += value
+            "right" -> this.centerX -= value
+            "up" -> this.centerY += value
+            "down" -> this.centerY -= value
             "zoomin" -> this.scale /= 2
             "zoomout" -> this.scale *= 2
             else -> println("No valid direction !")
