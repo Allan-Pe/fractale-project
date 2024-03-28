@@ -34,5 +34,10 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator) {
             call.respondBytes(byteArray, ContentType.Image.JPEG)
 
         }
+
+        get("/savefractal") {
+            fractalGenerator.saveFractalasJpeg()
+            call.respondText("image save")
+        }
     }
 }
