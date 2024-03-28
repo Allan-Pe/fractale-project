@@ -6,22 +6,20 @@ import javax.imageio.ImageIO
 
 // This script contains only pure functions
 // This function checks if a given coordinate is inside the generated fractal
-fun isInMandelbrotSet(x: Double, y: Double, maxIterations: Int): Boolean {
+fun isInMandelbrotSet(x: Double, y: Double, maxIterations: Int): Int {
     // Represents the real numbers, on the x coordinate
-    var real = x
-    // Represents the imaginary numbers, on the y coordinate
-    var imag = y
+    var real = 0.0
+    var imag = 0.0
+    var iter = 0
 
-    repeat(maxIterations) {
-        val realTemp = real * real - imag * imag + x
+    while (iter < maxIterations && real * real + imag * imag < 4) {
+        val tempReal = real * real - imag * imag + x
         imag = 2 * real * imag + y
-        real = realTemp
-        if (real * real + imag * imag > 4) {
-            return false
-        }
+        real = tempReal
+        iter++
     }
 
-    return true
+    return iter
 }
 
 fun convertImageToByteArray(image: BufferedImage): ByteArray {

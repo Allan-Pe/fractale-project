@@ -44,12 +44,20 @@ class FractalGenerator {
                 for (col in 0 until resolution) {
                     val x = (col - resolution / 2) * scale / resolution + centerX
                     val y = (row - resolution / 2) * scale / resolution + centerY
-                    val color = if (isInMandelbrotSet(x, y, maxIterations)) Color.BLACK else Color.WHITE
+                    val iterations = (isInMandelbrotSet(x, y, maxIterations))
+                    val color = getColor(iterations)
                     image.setRGB(col, row, color.rgb)
                 }
             }
 
             return image
+        }
+    }
+
+    fun getColor(iterations: Int): Color {
+        return when (iterations) {
+            in 0 until maxIterations -> Color.getHSBColor(iterations.toFloat() / maxIterations, 1f, 1f)
+            else -> Color.BLACK
         }
     }
 
