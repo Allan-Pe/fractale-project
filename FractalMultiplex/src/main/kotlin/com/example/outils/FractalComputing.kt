@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
 // This script contains only pure functions
+
 // This function checks if a given coordinate is inside the generated fractal
 fun isInMandelbrotSet(x: Double, y: Double, maxIterations: Int): Boolean {
     // Represents the real numbers, on the x coordinate

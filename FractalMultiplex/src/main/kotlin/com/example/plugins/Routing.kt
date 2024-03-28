@@ -17,7 +17,6 @@ data class FractalMovementDto(
 
 
 fun Application.configureRouting(fractalGenerator: FractalGenerator) {
-//    val fractalGenerator = FractalCallable()
     routing {
         get("/generatefractal") {
             val fullFractalImage = fractalGenerator.generateFractal()
@@ -27,12 +26,10 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator) {
 
         post("/generatefractal") {
             val requestDirections: FractalMovementDto = Json.decodeFromString(call.receiveText())
-            println(requestDirections)
             fractalGenerator.updateFractalPosition(requestDirections.direction)
             val fullFractalImage = fractalGenerator.generateFractal()
             val byteArray = convertImageToByteArray(fullFractalImage)
             call.respondBytes(byteArray, ContentType.Image.JPEG)
-
         }
     }
 }

@@ -4,9 +4,14 @@ import com.example.outils.isInMandelbrotSet
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Future
 import javax.imageio.ImageIO
 
-class FractalGenerator {
+class FractalGenerator(val threadPool: ExecutorService) {
+    // 'Any' must be changed for the value type of our returned result
+    val fractalPixels = mutableListOf<Future<Color>>()
+
     var centerX = 0.0
         set(value) {
             field = value
@@ -23,7 +28,7 @@ class FractalGenerator {
         set(value) {
             field = value
         }
-    var resolution = 1080
+    var resolution = 1000
         set(value) {
             field = value
         }
@@ -36,14 +41,15 @@ class FractalGenerator {
 
     private val image = BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_RGB)
     fun generateFractal(): BufferedImage {
-
         while (true) {
             for (row in 0 until resolution) {
                 for (col in 0 until resolution) {
-                    val x = (col - resolution / 2) * scale / resolution + centerX
-                    val y = (row - resolution / 2) * scale / resolution + centerY
-                    val color = if (isInMandelbrotSet(x, y, maxIterations)) Color.BLACK else Color.WHITE
-                    image.setRGB(col, row, color.rgb)
+                    val newCallableFractal = FractalCallable( row, col, resolution, scale, centerX, centerY, maxIterations)
+                    val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
+                    val colorResult = fractalFuture.get()
+
+                    // The color is in each future
+                    image.setRGB(col, row, colorResult.rgb)
                 }
             }
 
