@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
-import { generateFractal, updateFractalPosition } from "../../services/service";
+import { Box, Button, Typography } from "@mui/material";
+import { generateFractal, updateFractalPosition, saveFractal } from "../../services/service";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const Dashboard = () => {
@@ -82,7 +82,11 @@ const Dashboard = () => {
 
   return (
     <Box>
-      <Box>
+      <Box 
+      sx={{
+        display:"flex",
+        flexDirection: "column"
+      }}>
         <Typography variant="h2">Fractal Multiplex</Typography>
         <Typography sx={{ marginTop: "4rem" }}>navigate to infinity</Typography>
         {isLoading ? (
@@ -94,7 +98,7 @@ const Dashboard = () => {
             component="img"
             sx={{
               height: "80vh",
-              width: "160vh",
+              width: "80vh",
               // maxHeight: { xs: 233, md: 167 },
               // maxWidth: { xs: 350, md: 250 },
             }}
@@ -102,6 +106,7 @@ const Dashboard = () => {
             src={fractalImg}
           />
         )}
+        <Button onClick={() => saveFractal()}>Save me</Button>
       </Box>
     </Box>
   );

@@ -31,3 +31,13 @@ export const updateFractalPosition = async (direction: string) => {
     return responseBlob;
   } catch (error) {}
 };
+
+export const saveFractal = async () => {
+  try {
+    await axios.get(
+      "http://localhost:8080/savefractal",
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};

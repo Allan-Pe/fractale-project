@@ -31,5 +31,10 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator) {
             val byteArray = convertImageToByteArray(fullFractalImage)
             call.respondBytes(byteArray, ContentType.Image.JPEG)
         }
+
+        get("/savefractal") {
+            fractalGenerator.saveFractalasJpeg()
+            call.respondText("image save")
+        }
     }
 }
