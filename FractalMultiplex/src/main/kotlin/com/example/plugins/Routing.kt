@@ -1,6 +1,7 @@
 package com.example.plugins
 
 import com.example.fractalGenerator.FractalCallable
+import com.example.fractalGenerator.FractalGenerator
 import com.example.outils.convertImageToByteArray
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -12,17 +13,12 @@ import kotlinx.serialization.json.Json
 
 @Serializable
 data class FractalMovementDto(
-    val right: Boolean,
-    val left: Boolean,
-    val up: Boolean,
-    val down: Boolean,
-    val zoomin: Boolean,
-    val zoomout: Boolean
+    val direction : String
 )
 
 
-fun Application.configureRouting() {
-    val fractalGenerator = FractalCallable()
+fun Application.configureRouting(fractalGenerator: FractalGenerator) {
+//    val fractalGenerator = FractalCallable()
     routing {
         get("/generatefractal") {
             val fullFractalImage = fractalGenerator.generateFractal()
@@ -31,12 +27,13 @@ fun Application.configureRouting() {
         }
 
         post("/generatefractal") {
-            // TODO !!
-            // Interpret dto
             val requestDirections: FractalMovementDto = Json.decodeFromString(call.receiveText())
-            // Set values to move in fractal
-            // Regenerate fractal img
-            // send new byte array
+            println(requestDirections)
+            fractalGenerator.updateFractalPosition(requestDirections.direction)
+            val fullFractalImage = fractalGenerator.generateFractal()
+            val byteArray = convertImageToByteArray(fullFractalImage)
+            call.respondBytes(byteArray, ContentType.Image.JPEG)
+
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.fractalGenerator.FractalGenerator
 import com.example.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -18,9 +19,9 @@ fun Application.module() {
 //    val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
 //    // 'Any' must be changed for the value type of our returned result
 //    val fractalPixels = mutableListOf<Future<Any>>()
-
+    val fractalGenerator = FractalGenerator()
     configureHTTP()
     configureSerialization()
     configureTemplating()
-    configureRouting()
+    configureRouting(fractalGenerator)
 }
