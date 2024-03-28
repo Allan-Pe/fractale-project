@@ -31,7 +31,7 @@ class FractalCallable() {
             field = value
         }
 
-    val image = BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_RGB)
+    private val image = BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_RGB)
     fun generateFractal(): BufferedImage {
 
         while (true) {
