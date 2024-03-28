@@ -11,7 +11,6 @@ export const generateFractal = async () => {
     const responseBlob = new Blob([response.data], { type: "image/jpeg" });
     return responseBlob;
   } catch (error) {
-    // handle error
     console.log(error);
   }
 };
