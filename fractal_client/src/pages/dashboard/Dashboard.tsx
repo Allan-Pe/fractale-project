@@ -72,18 +72,15 @@ const Dashboard = () => {
     };
   }, []);
 
-  useEffect(() = {
-    generateStartFractal()
-  }, [])
+  useEffect(() => {
+    generateStartFractal();
+  }, []);
 
   return (
     <Box>
       <Box>
-        <Typography variant="h2">Dasboard</Typography>
-        <Typography sx={{ marginTop: "4rem" }}>
-          Data will be displayed here
-        </Typography>
-        <Button onClick={() => generateStartFractal()}>TEST</Button>
+        <Typography variant="h2">Fractal Multiplex</Typography>
+        <Typography sx={{ marginTop: "4rem" }}>navigate to infinity</Typography>
         <Box
           component="img"
           sx={{
