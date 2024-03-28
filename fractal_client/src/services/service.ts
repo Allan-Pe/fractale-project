@@ -3,13 +3,13 @@ import axios from "axios";
 // Make a request for a user with a given ID
 export const apiCall = async () => {
   try {
-    const response: Blob = await axios.get(
-      "http://localhost:8080/generatefractal"
+    const response: any = await axios.get(
+      "http://localhost:8080/generatefractal",
+      { responseType: "arraybuffer" }
     );
 
-    console.log(Blob);
-
-    return new Blob([response], { type: "image/jpeg" });
+    const responseBlob = new Blob([response.data], { type: "image/jpeg" });
+    return responseBlob;
   } catch (error) {
     // handle error
     console.log(error);

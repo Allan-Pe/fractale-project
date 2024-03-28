@@ -35,10 +35,10 @@ const Dashboard = () => {
         <Box
           component="img"
           sx={{
-            height: 500,
-            width: 700,
-            maxHeight: { xs: 233, md: 167 },
-            maxWidth: { xs: 350, md: 250 },
+            height: "90%",
+            width: "90%",
+            // maxHeight: { xs: 233, md: 167 },
+            // maxWidth: { xs: 350, md: 250 },
           }}
           alt=""
           src={fractalImg}
