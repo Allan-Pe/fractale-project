@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { generateFractal, updateFractalPosition } from "../../services/service";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Dashboard = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fractalImg, setFractalImg] = useState<string>();
 
   const generateStartFractal = async () => {
@@ -25,6 +27,7 @@ const Dashboard = () => {
   };
 
   const sendMovement = async (direction: string) => {
+    setIsLoading(true);
     try {
       const updateFractalResponse: any = await updateFractalPosition(direction);
 
@@ -33,6 +36,7 @@ const Dashboard = () => {
       }
 
       const newUrl = URL.createObjectURL(updateFractalResponse);
+      setIsLoading(false);
       setFractalImg(newUrl);
     } catch (error) {
       console.error("Error:", error);
@@ -81,17 +85,23 @@ const Dashboard = () => {
       <Box>
         <Typography variant="h2">Fractal Multiplex</Typography>
         <Typography sx={{ marginTop: "4rem" }}>navigate to infinity</Typography>
-        <Box
-          component="img"
-          sx={{
-            height: "90%",
-            width: "90%",
-            // maxHeight: { xs: 233, md: 167 },
-            // maxWidth: { xs: 350, md: 250 },
-          }}
-          alt=""
-          src={fractalImg}
-        />
+        {isLoading ? (
+          <Box>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box
+            component="img"
+            sx={{
+              height: "80vh",
+              width: "160vh",
+              // maxHeight: { xs: 233, md: 167 },
+              // maxWidth: { xs: 350, md: 250 },
+            }}
+            alt=""
+            src={fractalImg}
+          />
+        )}
       </Box>
     </Box>
   );

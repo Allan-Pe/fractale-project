@@ -53,8 +53,8 @@ class FractalGenerator {
 
     fun updateFractalPosition(direction: String) {
         when (direction) {
-            "left" -> this.centerX -= 1
-            "right" -> this.centerX += 1
+            "left" -> this.centerX += 1
+            "right" -> this.centerX -= 1
             "up" -> this.centerY += 1
             "down" -> this.centerY -= 1
             "zoomin" -> this.scale /= 2
