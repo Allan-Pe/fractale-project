@@ -5,7 +5,7 @@ import { generateFractal, updateFractalPosition } from "../../services/service";
 const Dashboard = () => {
   const [fractalImg, setFractalImg] = useState<string>();
 
-  const testGet = async () => {
+  const generateStartFractal = async () => {
     try {
       const response: any = await generateFractal();
 
@@ -23,52 +23,58 @@ const Dashboard = () => {
       console.error("Error:", error);
     }
   };
-  const sendMovement = async (direction: string) => {
-  
-    const updateFractalResponse: any = await updateFractalPosition(direction)
-    if (!(updateFractalResponse instanceof Blob)) {
-      throw new Error("Response is not a Blob.");
-    }
-    const url = URL.createObjectURL(updateFractalResponse);
-    console.log(url);
-    setFractalImg(url);
-  }
 
-  useEffect(() =>{
+  const sendMovement = async (direction: string) => {
+    try {
+      const updateFractalResponse: any = await updateFractalPosition(direction);
+
+      if (!(updateFractalResponse instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      const newUrl = URL.createObjectURL(updateFractalResponse);
+      setFractalImg(newUrl);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
     const handleKeyDown = (event: any) => {
-      switch (event.key){
-        case 'd':
+      switch (event.key) {
+        case "d":
           sendMovement("right");
           break;
-        case 'q':
+        case "q":
           sendMovement("left");
           break;
-        case 'z':
+        case "z":
           sendMovement("up");
           break;
-        case 's':
-          sendMovement("down")
+        case "s":
+          sendMovement("down");
           break;
-        case 'a':
-          sendMovement("zoomin")
+        case "a":
+          sendMovement("zoomin");
           break;
-        case 'e':
-          sendMovement("zoomout")
-          break
+        case "e":
+          sendMovement("zoomout");
+          break;
         default:
           break;
-
       }
-    }
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
     };
 
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
+  useEffect(() = {
+    generateStartFractal()
+  }, [])
 
   return (
     <Box>
@@ -77,7 +83,7 @@ const Dashboard = () => {
         <Typography sx={{ marginTop: "4rem" }}>
           Data will be displayed here
         </Typography>
-        <Button onClick={() => testGet()}>TEST</Button>
+        <Button onClick={() => generateStartFractal()}>TEST</Button>
         <Box
           component="img"
           sx={{

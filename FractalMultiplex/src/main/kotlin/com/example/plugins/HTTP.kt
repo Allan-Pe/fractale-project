@@ -9,10 +9,15 @@ fun Application.configureHTTP() {
     install(CORS) {
         allowMethod(HttpMethod.Options)
         allowMethod(HttpMethod.Put)
+        allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Delete)
         allowMethod(HttpMethod.Patch)
         allowHeader(HttpHeaders.Authorization)
-        allowHeader("MyCustomHeader")
+        allowHeader(HttpHeaders.AccessControlAllowOrigin)
+        allowHeader(HttpHeaders.AccessControlAllowCredentials)
+        allowHeader(HttpHeaders.ContentType)
+        allowHeader("Access-Control-Allow-Origin")
+        allowCredentials = true
         anyHost() // @TODO: Don't do this in production if possible. Try to limit it.
     }
     install(DefaultHeaders) {

@@ -5,8 +5,6 @@ import com.example.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
 
 fun main() {
 //    System.setProperty("io.ktor.development", "true")

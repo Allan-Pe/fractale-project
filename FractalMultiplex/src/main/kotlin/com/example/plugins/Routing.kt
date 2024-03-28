@@ -1,6 +1,5 @@
 package com.example.plugins
 
-import com.example.fractalGenerator.FractalCallable
 import com.example.fractalGenerator.FractalGenerator
 import com.example.outils.convertImageToByteArray
 import io.ktor.http.*
@@ -13,7 +12,7 @@ import kotlinx.serialization.json.Json
 
 @Serializable
 data class FractalMovementDto(
-    val direction : String
+    val direction: String
 )
 
 

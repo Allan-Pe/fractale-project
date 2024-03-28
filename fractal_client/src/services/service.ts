@@ -18,19 +18,17 @@ export const generateFractal = async () => {
 
 export const updateFractalPosition = async (direction: string) => {
   const config = {
-    body: {
-      direction
-    }
-  }
+    direction,
+  };
 
   try {
-    await axios.post("http://localhost:8080/generatefractal", config)
-    .then(response => {
-      const responseBlob = new Blob([response.data], { type: "image/jpeg" });
-      console.log(responseBlob)
-    })
+    const response: any = await axios.post(
+      "http://localhost:8080/generatefractal",
+      config,
+      { responseType: "arraybuffer" }
+    );
 
-  } catch (error) {
-    
-  }
-}
+    const responseBlob = new Blob([response.data], { type: "image/jpeg" });
+    return responseBlob;
+  } catch (error) {}
+};

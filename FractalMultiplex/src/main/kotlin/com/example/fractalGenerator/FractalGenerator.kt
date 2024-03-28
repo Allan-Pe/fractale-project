@@ -9,11 +9,13 @@ class FractalGenerator {
         set(value) {
             field = value
         }
+
     // Add to move up, subtract to move down
     var centerY = 0.0
         set(value) {
             field = value
         }
+
     // /2 to zoom in, *2 to zoom out
     var scale = 4.0
         set(value) {
@@ -47,16 +49,15 @@ class FractalGenerator {
         }
     }
 
-    fun updateFractalPosition(direction : String){
+    fun updateFractalPosition(direction: String) {
         when (direction) {
             "left" -> this.centerX -= 1
-            "right"-> this.centerX +=1
-            "up" -> this.centerY +=1
-            "down" -> this.centerY -=1
-            "zoomin" -> this.scale /=2
+            "right" -> this.centerX += 1
+            "up" -> this.centerY += 1
+            "down" -> this.centerY -= 1
+            "zoomin" -> this.scale /= 1
             "zoomout" -> this.scale *= 2
-            else -> println("pas bien")
+            else -> println("No valid direction !")
         }
-
     }
 }
