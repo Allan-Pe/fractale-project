@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
+import { getstats } from "../services/service";
 const StatsScreen = ({
-  timeTotal = 10,
-  timeAverage = 10,
-  timeAverageTask = 10,
-  numberIterations = 10,
 }) => {
   const [showStats, setShowStats] = useState(true);
+  const [stats, setStats] = useState(0);
 
   const handleClose = () => {
     setShowStats(false);
@@ -14,6 +12,13 @@ const StatsScreen = ({
   const handleOpen = () => {
     setShowStats(true);
   };
+  
+    const getData = async () => {
+      const response = getstats();
+      setStats(await response);
+    };
+    setTimeout(getData, 200)
+
   return (
     <>
       {showStats ? (
@@ -36,7 +41,7 @@ const StatsScreen = ({
               top: "5px",
               right: "5px",
               fontSize: "1.2rem",
-              marginRight: "10px"
+              marginRight: "10px",
             }}
           >
             &times;
@@ -48,10 +53,10 @@ const StatsScreen = ({
           >
             Statistics
           </Typography>
-          <Typography>Time total : {timeTotal} ms</Typography>
-          <Typography>Average time : {timeAverage} ms</Typography>
-          <Typography>Average task time : {timeAverageTask} ms</Typography>
-          <Typography>Number iterations : {numberIterations}</Typography>
+          <Typography>Time total : {stats.timeImage} ms</Typography>
+          <Typography>Average time : {stats.averageTimeImage} ms</Typography>
+          <Typography>Average task time : {stats.averageTimeTask} ms</Typography>
+          <Typography>Number iterations : {stats.iteration}</Typography>
         </Box>
       ) : (
         <Button

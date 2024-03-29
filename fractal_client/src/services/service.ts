@@ -41,3 +41,14 @@ export const saveFractal = async () => {
     console.log(error);
   }
 };
+
+export const getstats = async () => {
+  try {
+    const response = await axios.get(
+      "http://localhost:8080/getstats",
+    );
+    return response.data
+  } catch (error) {
+    console.log(error);
+  }
+};
