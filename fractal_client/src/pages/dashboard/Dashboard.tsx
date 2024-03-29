@@ -83,12 +83,7 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ position: "relative" }}>
-      <StatsScreen
-        timeTotal={10} 
-        timeAverage={10}
-        timeAverageTask={10}
-        numberIterations={10}
-      />
+      <StatsScreen/>
       <Box 
       sx={{
         display:"flex",
