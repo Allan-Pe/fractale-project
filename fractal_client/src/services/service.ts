@@ -34,9 +34,7 @@ export const updateFractalPosition = async (direction: string) => {
 
 export const saveFractal = async () => {
   try {
-    await axios.get(
-      "http://localhost:8080/savefractal",
-    );
+    await axios.get("http://localhost:8080/savefractal");
   } catch (error) {
     console.log(error);
   }
@@ -44,10 +42,9 @@ export const saveFractal = async () => {
 
 export const getstats = async () => {
   try {
-    const response = await axios.get(
-      "http://localhost:8080/getstats",
-    );
-    return response.data
+    const response = await axios.get("http://localhost:8080/getstats");
+
+    return response.data;
   } catch (error) {
     console.log(error);
   }

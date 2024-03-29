@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { getstats } from "../services/service";
-const StatsScreen = ({
-}) => {
+import { Stats } from "./componentInterfaces";
+const StatsScreen = ({}) => {
   const [showStats, setShowStats] = useState(true);
-  const [stats, setStats] = useState(0);
+  const [stats, setStats] = useState<Stats>({
+    timeImage: 0,
+    avarageTimeImage: 0,
+    avarageTimeTask: 0,
+    iteration: 0,
+  });
 
   const handleClose = () => {
     setShowStats(false);
@@ -12,12 +17,20 @@ const StatsScreen = ({
   const handleOpen = () => {
     setShowStats(true);
   };
-  
-    const getData = async () => {
-      const response = getstats();
-      setStats(await response);
-    };
-    setTimeout(getData, 200)
+
+  const getData = async () => {
+    const response: Stats = await getstats();
+
+    console.log(response);
+
+    setStats(response);
+  };
+
+  // setTimeout(getData, 200);
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
@@ -54,8 +67,10 @@ const StatsScreen = ({
             Statistics
           </Typography>
           <Typography>Time total : {stats.timeImage} ms</Typography>
-          <Typography>Average time : {stats.averageTimeImage} ms</Typography>
-          <Typography>Average task time : {stats.averageTimeTask} ms</Typography>
+          <Typography>Average time : {stats.avarageTimeImage} ms</Typography>
+          <Typography>
+            Average task time : {stats.avarageTimeTask} ms
+          </Typography>
           <Typography>Number iterations : {stats.iteration}</Typography>
         </Box>
       ) : (
