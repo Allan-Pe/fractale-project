@@ -1,12 +1,21 @@
 package com.example.fractalGenerator
 
-import com.example.outils.isInMandelbrotSet
 import java.awt.Color
-import java.awt.image.BufferedImage
 import java.util.concurrent.Callable
 
-class FractalCallable(): Callable<Int> {
-    override fun call(): Int? {
-        TODO("Not yet implemented")
+class FractalCallable(
+    val row: Int,
+    val col: Int,
+    val resolution: Int,
+    val scale: Double,
+    val centerX: Double,
+    val centerY: Double,
+    val maxIterations: Int
+) : Callable<Color> {
+    override fun call(): Color {
+        val x = (col - resolution / 2) * scale / resolution + centerX
+        val y = (row - resolution / 2) * scale / resolution + centerY
+        val color = if (isInMandelbrotSet(x, y, maxIterations)) Color.BLACK else Color.WHITE
+        return color
     }
 }

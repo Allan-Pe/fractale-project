@@ -1,7 +1,7 @@
 package com.example.plugins
 
 import com.example.fractalGenerator.FractalGenerator
-import com.example.outils.convertImageToByteArray
+import com.example.fractalGenerator.convertImageToByteArray
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -17,7 +17,6 @@ data class FractalMovementDto(
 
 
 fun Application.configureRouting(fractalGenerator: FractalGenerator) {
-//    val fractalGenerator = FractalCallable()
     routing {
         get("/generatefractal") {
             val fullFractalImage = fractalGenerator.generateFractal()
@@ -27,12 +26,10 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator) {
 
         post("/generatefractal") {
             val requestDirections: FractalMovementDto = Json.decodeFromString(call.receiveText())
-            println(requestDirections)
             fractalGenerator.updateFractalPosition(requestDirections.direction)
             val fullFractalImage = fractalGenerator.generateFractal()
             val byteArray = convertImageToByteArray(fullFractalImage)
             call.respondBytes(byteArray, ContentType.Image.JPEG)
-
         }
 
         get("/savefractal") {
