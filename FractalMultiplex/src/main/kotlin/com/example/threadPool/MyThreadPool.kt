@@ -2,16 +2,41 @@ package com.example.threadPool
 
 import java.util.concurrent.*
 
-class MyThreadPool(val nbThreads: Int) : MyExecutorService {
-    private val linkedBlockingQueue = LinkedBlockingQueue<Runnable>()
+interface MyExecutor {
+    fun submit(callable: Callable<String>): Future<String>
+
+}
+
+class MyThreadPoolExecutor : MyExecutor {
+
+    private val threadPool = MyThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
+    override fun submit(callable: Callable<String>): Future<String> {
+        return threadPool.submit(callable)
+    }
+}
+
+class MainExecutorKotlin : MyExecutor {
+
+    private val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
+    override fun submit(callable: Callable<String>): Future<String> {
+        return executor.submit(callable)
+    }
+
+
+}
+
+class MyThreadPool(val nbThreads: Int) {
+    private val linkedBlockingQueue = LinkedBlockingQueue<RunnableFuture<String>>()
     private val threadList = mutableListOf<Thread>()
 
     init {
         threadCreator()
     }
 
-    fun addTaskToQueue(task: Runnable) {
-        linkedBlockingQueue.add(task);
+    fun addTaskToQueue(task: Callable<String>): Future<String> {
+        val fTask = FutureTask<String>(task)
+        linkedBlockingQueue.add(fTask)
+        return fTask
     }
 
     fun threadCreator() {
@@ -22,25 +47,21 @@ class MyThreadPool(val nbThreads: Int) : MyExecutorService {
         }
     }
 
-    override fun execute(task: Runnable) {
-        addTaskToQueue(task)
-    }
+    fun submit(task: Callable<String>): Future<String> {
+        return addTaskToQueue(task)
 
+    }
 
     inner class MyThread(
     ) : Thread() {
 
         override fun run() {
             while (true) {
-                val task: Runnable = linkedBlockingQueue.take()
+                val task = linkedBlockingQueue.take()
                 task.run()
             }
         }
     }
-}
-
-interface MyExecutorService : Executor {
-    override fun execute(task: Runnable)
 }
 
 
@@ -58,33 +79,10 @@ class Task2 : Callable<String> {
 
 fun main() {
 
-    val task = Task()
-    val threadPool = MyThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
+    val task = Task2()
+    val executor: MyExecutor = MyThreadPoolExecutor()
 
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-    threadPool.execute(task)
-
+    val res = executor.submit(task)
+    println(res.get())
 
 }
