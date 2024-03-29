@@ -55,18 +55,10 @@ class FractalGenerator(val threadPool: ExecutorService) {
             val colorResult = future.get()
             val col = index % resolution
             val row = index / resolution
-            val color = getColor(colorResult.rgb)
-            image.setRGB(col, row, color.rgb)
+            image.setRGB(col, row, colorResult.rgb)
         }
 
         return image
-    }
-
-    fun getColor(iterations: Int): Color {
-        return when (iterations) {
-            in 0 until maxIterations -> Color.getHSBColor(iterations.toFloat() / maxIterations, 1f, 1f)
-            else -> Color.BLACK
-        }
     }
 
     fun updateFractalPosition(direction: String) {

@@ -15,7 +15,7 @@ class FractalCallable(
     override fun call(): Color {
         val x = (col - resolution / 2) * scale / resolution + centerX
         val y = (row - resolution / 2) * scale / resolution + centerY
-        val color = if (isInMandelbrotSet(x, y, maxIterations)) Color.BLACK else Color.WHITE
+        val color = isInMandelbrotSet(x, y, maxIterations)
         return color
     }
 }
