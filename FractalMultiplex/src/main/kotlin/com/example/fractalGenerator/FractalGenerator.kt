@@ -68,15 +68,6 @@ class FractalGenerator(val threadPool: ExecutorService) {
         val generationTime = endTime - start
         stats.addImage(generationTime, resolution)
 
-        println("TIME THIS IMG : ${stats.timeThisImage}ms")
-        println("AVERAGE TIME : ${stats.averageGenerationTime()}ms")
-        println("TOTAL IMAGES GENERATED : ${stats.totalImagesGenerated}")
-        println("TOTAL ITERATION : ${stats.totalIterations}")
-        println("==========================================================")
-        println("TOTAL TIME TASK : ${stats.totalTimeTask}ms")
-        println("TOTAL TASK GENERATED : ${stats.totalTaskGenerated}")
-        println("AVERAGE TIME : ${stats.averageGenerationTimeTask()}ms")
-
         return image
     }
 
