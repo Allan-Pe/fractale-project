@@ -15,7 +15,7 @@ fun main() {
 }
 
 fun Application.module() {
-    val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
+    val threadPool = Executors.newFisqxedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
     val fractalGenerator = FractalGenerator(threadPool)
 
     configureHTTP()

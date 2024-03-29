@@ -1,6 +1,5 @@
 package com.example.fractalGenerator
 
-import com.example.outils.isInMandelbrotSet
 import java.awt.Color
 import java.util.concurrent.Callable
 

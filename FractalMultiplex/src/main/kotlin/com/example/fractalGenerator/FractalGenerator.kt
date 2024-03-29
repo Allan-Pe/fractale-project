@@ -1,6 +1,5 @@
 package com.example.fractalGenerator
 
-import com.example.outils.isInMandelbrotSet
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -9,7 +8,6 @@ import java.util.concurrent.Future
 import javax.imageio.ImageIO
 
 class FractalGenerator(val threadPool: ExecutorService) {
-    // 'Any' must be changed for the value type of our returned result
     val fractalPixels = mutableListOf<Future<Color>>()
 
     var centerX = 0.0
@@ -34,37 +32,42 @@ class FractalGenerator(val threadPool: ExecutorService) {
         }
 
     // With this value we set the gradiant outside the fractal
-    var maxIterations = 1000
+    var maxIterations = 100
         set(value) {
             field = value
         }
 
-    var value : Float = 1f;
+    var value: Float = 1f
 
     private val image = BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_RGB)
     fun generateFractal(): BufferedImage {
-        while (true) {
-            for (row in 0 until resolution) {
-                for (col in 0 until resolution) {
-                    val newCallableFractal = FractalCallable( row, col, resolution, scale, centerX, centerY, maxIterations)
-                    val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
-                    val colorResult = fractalFuture.get()
+        val fractalPixels = mutableListOf<Future<Color>>()
 
-                    // The color is in each future
-                    image.setRGB(col, row, colorResult.rgb)
-                }
+        for (row in 0 until resolution) {
+            for (col in 0 until resolution) {
+                val newCallableFractal = FractalCallable(row, col, resolution, scale, centerX, centerY, maxIterations)
+                val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
+                fractalPixels.add(fractalFuture)
             }
-
-            return image
         }
+
+        for ((index, future) in fractalPixels.withIndex()) {
+            val colorResult = future.get()
+            val col = index % resolution
+            val row = index / resolution
+            image.setRGB(col, row, colorResult.rgb)
+        }
+
+        return image
     }
 
     fun updateFractalPosition(direction: String) {
-        if (direction == "zoomin"){
+        if (direction == "zoomin") {
             value /= 2;
-        } else if (direction == "zoomout"){
+        } else if (direction == "zoomout") {
             value *= 2;
         }
+
         when (direction) {
             "left" -> this.centerX += value
             "right" -> this.centerX -= value

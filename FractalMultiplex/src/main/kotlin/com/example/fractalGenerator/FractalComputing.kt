@@ -1,4 +1,4 @@
-package com.example.outils
+package com.example.fractalGenerator
 
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream

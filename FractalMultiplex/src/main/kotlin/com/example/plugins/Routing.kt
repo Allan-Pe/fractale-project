@@ -1,7 +1,7 @@
 package com.example.plugins
 
 import com.example.fractalGenerator.FractalGenerator
-import com.example.outils.convertImageToByteArray
+import com.example.fractalGenerator.convertImageToByteArray
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
