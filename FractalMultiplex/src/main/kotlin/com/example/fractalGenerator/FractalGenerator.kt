@@ -14,6 +14,15 @@ class FractalGenerator(val threadPool: ExecutorService) {
             BufferedImage(fractalProperties.resolution, fractalProperties.resolution, BufferedImage.TYPE_INT_RGB)
         val fractalPixels = mutableListOf<Future<Color>>()
 
+        // width & height equal = 100
+        // th = 10 pixels by tile
+        // tw = 10
+        // nb widht = w/tw -> tasks
+        // nb heigh = h/th
+        // for (row = 0, rom +=nbwidth)
+        // for (col= 0, col += nbheigh...)
+        // once in the task -> task(row, col, tw, th, et le reste)
+
         for (row in 0 until fractalProperties.resolution) {
             for (col in 0 until fractalProperties.resolution) {
                 val newCallableFractal = FractalCallable(
