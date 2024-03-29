@@ -6,8 +6,8 @@ const StatsScreen = ({}) => {
   const [showStats, setShowStats] = useState(true);
   const [stats, setStats] = useState<Stats>({
     timeImage: 0,
-    avarageTimeImage: 0,
-    avarageTimeTask: 0,
+    averageTimeImage: 0,
+    averageTimeTask: 0,
     iteration: 0,
   });
 
@@ -67,9 +67,9 @@ const StatsScreen = ({}) => {
             Statistics
           </Typography>
           <Typography>Time total : {stats.timeImage} ms</Typography>
-          <Typography>Average time : {stats.avarageTimeImage} ms</Typography>
+          <Typography>Average time : {stats.averageTimeImage} ms</Typography>
           <Typography>
-            Average task time : {stats.avarageTimeTask} ms
+            Average task time : {stats.averageTimeTask} ms
           </Typography>
           <Typography>Number iterations : {stats.iteration}</Typography>
         </Box>
