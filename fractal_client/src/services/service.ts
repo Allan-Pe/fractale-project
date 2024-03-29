@@ -1,10 +1,12 @@
 import axios from "axios";
+import { FractalProperties } from "./interfaces";
 
 // Make a request for a user with a given ID
-export const generateFractal = async () => {
+export const generateFractal = async (fractalProperties: FractalProperties) => {
   try {
-    const response: any = await axios.get(
-      "http://localhost:8080/generatefractal",
+    const response: any = await axios.post(
+      "http://localhost:8080/generatenewfractal",
+      fractalProperties,
       { responseType: "arraybuffer" }
     );
 
@@ -15,15 +17,13 @@ export const generateFractal = async () => {
   }
 };
 
-export const updateFractalPosition = async (direction: string) => {
-  const config = {
-    direction,
-  };
-
+export const updateFractalPosition = async (
+  fractalProperties: FractalProperties
+) => {
   try {
     const response: any = await axios.post(
-      "http://localhost:8080/generatefractal",
-      config,
+      "http://localhost:8080/updatefractal",
+      fractalProperties,
       { responseType: "arraybuffer" }
     );
 
@@ -32,12 +32,11 @@ export const updateFractalPosition = async (direction: string) => {
   } catch (error) {}
 };
 
-export const saveFractal = async () => {
+export const saveFractal = async (fractalProperties: FractalProperties) => {
   try {
-    await axios.get(
+    const response: any = await axios.post(
       "http://localhost:8080/savefractal",
+      fractalProperties
     );
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };

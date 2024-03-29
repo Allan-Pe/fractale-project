@@ -1,5 +1,6 @@
 package com.example.fractalGenerator
 
+import com.example.fractalGenerator.outil.FractalProperties
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -8,44 +9,23 @@ import java.util.concurrent.Future
 import javax.imageio.ImageIO
 
 class FractalGenerator(val threadPool: ExecutorService) {
-    val fractalPixels = mutableListOf<Future<Color>>()
-
-    var centerX = 0.0
-        set(value) {
-            field = value
-        }
-
-    // Add to move up, subtract to move down
-    var centerY = 0.0
-        set(value) {
-            field = value
-        }
-
-    // /2 to zoom in, *2 to zoom out
-    var scale = 4.0
-        set(value) {
-            field = value
-        }
-    var resolution = 1000
-        set(value) {
-            field = value
-        }
-
-    // With this value we set the gradiant outside the fractal
-    var maxIterations = 100
-        set(value) {
-            field = value
-        }
-
-    var value: Float = 1f
-
-    private val image = BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_RGB)
-    fun generateFractal(): BufferedImage {
+    fun generateFractal(fractalProperties: FractalProperties): BufferedImage {
+        val fractalImage =
+            BufferedImage(fractalProperties.resolution, fractalProperties.resolution, BufferedImage.TYPE_INT_RGB)
         val fractalPixels = mutableListOf<Future<Color>>()
 
-        for (row in 0 until resolution) {
-            for (col in 0 until resolution) {
-                val newCallableFractal = FractalCallable(row, col, resolution, scale, centerX, centerY, maxIterations)
+        for (row in 0 until fractalProperties.resolution) {
+            for (col in 0 until fractalProperties.resolution) {
+                val newCallableFractal = FractalCallable(
+                    row,
+                    col,
+                    fractalProperties.resolution,
+                    fractalProperties.scale,
+                    fractalProperties.centerX,
+                    fractalProperties.centerY,
+                    fractalProperties.maxIterations
+                )
+
                 val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
                 fractalPixels.add(fractalFuture)
             }
@@ -53,34 +33,18 @@ class FractalGenerator(val threadPool: ExecutorService) {
 
         for ((index, future) in fractalPixels.withIndex()) {
             val colorResult = future.get()
-            val col = index % resolution
-            val row = index / resolution
-            image.setRGB(col, row, colorResult.rgb)
+            val col = index % fractalProperties.resolution
+            val row = index / fractalProperties.resolution
+            fractalImage.setRGB(col, row, colorResult.rgb)
         }
 
-        return image
+        return fractalImage
     }
 
-    fun updateFractalPosition(direction: String) {
-        if (direction == "zoomin") {
-            value /= 2;
-        } else if (direction == "zoomout") {
-            value *= 2;
-        }
-
-        when (direction) {
-            "left" -> this.centerX += value
-            "right" -> this.centerX -= value
-            "up" -> this.centerY += value
-            "down" -> this.centerY -= value
-            "zoomin" -> this.scale /= 2
-            "zoomout" -> this.scale *= 2
-            else -> println("No valid direction !")
-        }
-    }
-
-    fun saveFractalasJpeg() {
-        val outputFile = File("fractalTests/fractalimg-r$resolution-s$scale-newImg.jpg")
-        ImageIO.write(image, "jpg", outputFile)
+    fun saveFractalasJpeg(fractalProperties: FractalProperties) {
+        val outputFile =
+            File("fractalTests/fractalimg-r${fractalProperties.resolution}-s${fractalProperties.scale}-newImg.jpg")
+        val imageToSave = generateFractal(fractalProperties)
+        ImageIO.write(imageToSave, "jpg", outputFile)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.fractalGenerator
+package com.example.fractalGenerator.outil
 
 import java.awt.Color
 import java.awt.image.BufferedImage
@@ -29,7 +29,6 @@ fun isInMandelbrotSet(x: Double, y: Double, maxIterations: Int): Color {
     }
 
     val finalColor = getColor(iter, maxIterations)
-
     return finalColor
 }
 

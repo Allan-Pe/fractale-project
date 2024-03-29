@@ -1,22 +1,37 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { generateFractal, updateFractalPosition, saveFractal } from "../../services/service";
+import {
+  generateFractal,
+  updateFractalPosition,
+  saveFractal,
+} from "../../services/service";
 import CircularProgress from "@mui/material/CircularProgress";
+import { FractalProperties } from "../../services/interfaces";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fractalImg, setFractalImg] = useState<string>();
+  const [movementDistanceCorrector, setMovementDistanceCorrector] =
+    useState<number>(1.0);
+  const [fractalProperties, setFractalProperties] = useState<FractalProperties>(
+    {
+      centerX: 0.0,
+      centerY: 0.0,
+      scale: 4.0,
+      resolution: 1000,
+      maxIterations: 100,
+    }
+  );
 
   const generateStartFractal = async () => {
     try {
-      const response: any = await generateFractal();
+      const response: any = await generateFractal(fractalProperties);
 
       if (!(response instanceof Blob)) {
         throw new Error("Response is not a Blob.");
       }
 
       const url = URL.createObjectURL(response);
-      console.log(url);
       setFractalImg(url);
 
       // Optionally, revoke the URL to free up memory when not needed anymore
@@ -26,10 +41,17 @@ const Dashboard = () => {
     }
   };
 
-  const sendMovement = async (direction: string) => {
+  const handleSaveFractal = () => {
+    saveFractal(fractalProperties);
+  };
+
+  const setFractalPosition = async () => {
     setIsLoading(true);
+
     try {
-      const updateFractalResponse: any = await updateFractalPosition(direction);
+      const updateFractalResponse: any = await updateFractalPosition(
+        fractalProperties
+      );
 
       if (!(updateFractalResponse instanceof Blob)) {
         throw new Error("Response is not a Blob.");
@@ -43,32 +65,45 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    const handleKeyDown = (event: any) => {
-      switch (event.key) {
+  const calculateNewFractalProperties = (value: string) => {
+    setFractalProperties((prevFractalProperties) => {
+      const newFractalProperties = {
+        ...prevFractalProperties,
+      };
+
+      switch (value) {
         case "d":
-          sendMovement("right");
+          newFractalProperties.centerX -= movementDistanceCorrector;
           break;
         case "q":
-          sendMovement("left");
+          newFractalProperties.centerX += movementDistanceCorrector;
           break;
         case "z":
-          sendMovement("up");
+          newFractalProperties.centerY += movementDistanceCorrector;
           break;
         case "s":
-          sendMovement("down");
+          newFractalProperties.centerY -= movementDistanceCorrector;
           break;
         case "a":
-          sendMovement("zoomin");
+          setMovementDistanceCorrector((prevValue) => prevValue / 2);
+          newFractalProperties.scale /= 2;
           break;
         case "e":
-          sendMovement("zoomout");
+          setMovementDistanceCorrector((prevValue) => prevValue * 2);
+          newFractalProperties.scale *= 2;
           break;
         default:
           break;
       }
-    };
 
+      return newFractalProperties;
+    });
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: any) => {
+      calculateNewFractalProperties(event.key);
+    };
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
@@ -77,16 +112,21 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    setFractalPosition();
+  }, [fractalProperties]);
+
+  useEffect(() => {
     generateStartFractal();
   }, []);
 
   return (
     <Box>
-      <Box 
-      sx={{
-        display:"flex",
-        flexDirection: "column"
-      }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Typography variant="h2">Fractal Multiplex</Typography>
         <Typography sx={{ marginTop: "4rem" }}>navigate to infinity</Typography>
         {isLoading ? (
@@ -99,14 +139,12 @@ const Dashboard = () => {
             sx={{
               height: "80vh",
               width: "80vh",
-              // maxHeight: { xs: 233, md: 167 },
-              // maxWidth: { xs: 350, md: 250 },
             }}
             alt=""
             src={fractalImg}
           />
         )}
-        <Button onClick={() => saveFractal()}>Save me</Button>
+        <Button onClick={() => handleSaveFractal()}>Save me</Button>
       </Box>
     </Box>
   );
