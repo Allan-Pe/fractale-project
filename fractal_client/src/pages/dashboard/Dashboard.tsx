@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { generateFractal, updateFractalPosition, saveFractal } from "../../services/service";
 import CircularProgress from "@mui/material/CircularProgress";
+import StatsScreen from "../../components/Monitoring";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -81,7 +82,13 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ position: "relative" }}>
+      <StatsScreen
+        timeTotal={10} 
+        timeAverage={10}
+        timeAverageTask={10}
+        numberIterations={10}
+      />
       <Box 
       sx={{
         display:"flex",
