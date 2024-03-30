@@ -2,39 +2,44 @@ package com.example.threadPool
 
 import java.util.concurrent.*
 
-interface MyExecutor {
-    fun submit(callable: Callable<String>): Future<String>
+
+interface MyCallable<T> : Callable<T> {
+    override fun call() : T
+}
+
+interface MyExecutor<T> {
+    fun submit(callable: MyCallable<T>): Future<T>
 
 }
 
-class MyThreadPoolExecutor : MyExecutor {
+class MyThreadPoolExecutor<T> : MyExecutor<T> {
 
-    private val threadPool = MyThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
-    override fun submit(callable: Callable<String>): Future<String> {
+    private val threadPool = MyThreadPool<T>(Runtime.getRuntime().availableProcessors() * 2 + 1)
+    override fun submit(callable: MyCallable<T>): Future<T> {
         return threadPool.submit(callable)
     }
 }
 
-class MainExecutorKotlin : MyExecutor {
+class MainExecutorKotlin<T> : MyExecutor<T> {
 
     private val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
-    override fun submit(callable: Callable<String>): Future<String> {
+    override fun submit(callable: MyCallable<T>): Future<T> {
         return executor.submit(callable)
     }
 
 
 }
 
-class MyThreadPool(val nbThreads: Int) {
-    private val linkedBlockingQueue = LinkedBlockingQueue<RunnableFuture<String>>()
+class MyThreadPool<T>(val nbThreads: Int) {
+    private val linkedBlockingQueue = LinkedBlockingQueue<RunnableFuture<T>>()
     private val threadList = mutableListOf<Thread>()
 
     init {
         threadCreator()
     }
 
-    fun addTaskToQueue(task: Callable<String>): Future<String> {
-        val fTask = FutureTask<String>(task)
+    fun addTaskToQueue(task: MyCallable<T>): Future<T> {
+        val fTask = FutureTask(task)
         linkedBlockingQueue.add(fTask)
         return fTask
     }
@@ -47,7 +52,7 @@ class MyThreadPool(val nbThreads: Int) {
         }
     }
 
-    fun submit(task: Callable<String>): Future<String> {
+    fun submit(task: MyCallable<T>): Future<T> {
         return addTaskToQueue(task)
 
     }
@@ -71,7 +76,7 @@ class Task : Runnable {
     }
 }
 
-class Task2 : Callable<String> {
+class Task2 : MyCallable<String> {
     override fun call(): String {
         return "CALL OK !!!!"
     }
@@ -80,7 +85,7 @@ class Task2 : Callable<String> {
 fun main() {
 
     val task = Task2()
-    val executor: MyExecutor = MyThreadPoolExecutor()
+    val executor : MyExecutor<String> = MyThreadPoolExecutor()
 
     val res = executor.submit(task)
     println(res.get())
