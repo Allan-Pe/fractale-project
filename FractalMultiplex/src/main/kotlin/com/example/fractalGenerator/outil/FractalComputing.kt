@@ -15,8 +15,6 @@ fun getColor(iterations: Int, maxIterations: Int): Color {
 
 // This function checks if a given coordinate is inside the generated fractal
 fun isInMandelbrotSet(x: Double, y: Double, maxIterations: Int): Color {
-    println("value of x: $x, value of y: $y, value of maxIterations: $maxIterations")
-    // Represents the real numbers, on the x coordinate
     var real = 0.0
     var imag = 0.0
     var currentIteration = 0
@@ -25,15 +23,13 @@ fun isInMandelbrotSet(x: Double, y: Double, maxIterations: Int): Color {
         val tempReal = real * real - imag * imag + x
         imag = 2 * real * imag + y
         real = tempReal
-        println(currentIteration)
         currentIteration++
     }
 
-//    println("Iterations: $currentIteration, Max Iterations: $maxIterations")
+    println(currentIteration)
 
-    val finalColor = getColor(currentIteration, maxIterations)
-//    println("Final Color: $finalColor")
-    return finalColor
+    val color = getColor(currentIteration, maxIterations)
+    return color
 }
 
 fun convertImageToByteArray(image: BufferedImage): ByteArray {

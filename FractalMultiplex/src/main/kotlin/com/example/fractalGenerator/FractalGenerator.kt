@@ -15,8 +15,8 @@ class FractalGenerator(val threadPool: ExecutorService) {
             BufferedImage(fractalProperties.width, fractalProperties.height, BufferedImage.TYPE_INT_RGB)
         val fractalPixels = mutableListOf<Future<Color>>()
 
-        val width = 100
-        val height = 100
+        val width = fractalProperties.width
+        val height = fractalProperties.height
         val pixelsPerTileWidth = 10
         val pixelsPerTileHeight = 10
         val numberOfTilesWidth = width / pixelsPerTileWidth
@@ -55,8 +55,6 @@ class FractalGenerator(val threadPool: ExecutorService) {
             // Calculate the position in the final image for the current tile
             val startX = (index % numberOfTilesWidth) * pixelsPerTileWidth
             val startY = (index / numberOfTilesWidth) * pixelsPerTileHeight
-
-//            println("Rendering tile $index at ($startX, $startY) with color: $colorResult")
 
             // Set the color of each pixel in the tile to the corresponding position in the final image
             for (x in 0 until pixelsPerTileWidth) {
