@@ -1,6 +1,6 @@
 package com.example.fractalGenerator.outil
 
-class FractalCallProperties(
+class FractalTileProperties(
     val startXcol: Int,
     val startYrow: Int,
     val centerX: Double,

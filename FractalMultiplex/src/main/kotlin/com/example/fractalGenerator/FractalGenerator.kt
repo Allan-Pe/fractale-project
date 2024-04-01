@@ -1,60 +1,62 @@
 package com.example.fractalGenerator
 
-import com.example.fractalGenerator.outil.FractalCallProperties
 import com.example.fractalGenerator.outil.FractalProperties
+import com.example.fractalGenerator.outil.FractalTileProperties
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
 import javax.imageio.ImageIO
+import kotlin.math.log
 
 class FractalGenerator(val threadPool: ExecutorService) {
     fun generateFractal(fractalProperties: FractalProperties): BufferedImage {
         val fractalImage =
-            BufferedImage(fractalProperties.width, fractalProperties.height, BufferedImage.TYPE_INT_RGB)
-        val fractalPixels = mutableListOf<Future<Color>>()
+            BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB)
+        val fractalTiles = mutableListOf<Future<Color>>()
 
-        val width = fractalProperties.width
-        val height = fractalProperties.height
+        val width = 100
+        val height = 100
         val pixelsPerTileWidth = 10
         val pixelsPerTileHeight = 10
         val numberOfTilesWidth = width / pixelsPerTileWidth
         val numberOfTilesHeight = height / pixelsPerTileHeight
 
+//        println("number of tiles for x: $numberOfTilesWidth, number of tiles for y: $numberOfTilesHeight")
+
 //        println("Number of tiles: $numberOfTilesWidth x $numberOfTilesHeight")
 
         for (row in 0 until numberOfTilesHeight) {
+            val startYrow = row * pixelsPerTileHeight
             for (col in 0 until numberOfTilesWidth) {
                 val startXcol = col * pixelsPerTileWidth
-                val startYrow = row * pixelsPerTileHeight
-
-//                println("Tile ($col, $row): StartX=$startXcol, StartY=$startYrow")
 
                 val newCallableFractal = FractalCallable(
-                    FractalCallProperties(
-                        startXcol,
+                    FractalTileProperties(
                         startYrow,
-                        fractalProperties.centerX,
-                        fractalProperties.centerY,
-                        fractalProperties.scale,
+                        startXcol,
+                        0.0,
+                        0.0,
+                        4.0,
                         pixelsPerTileWidth,
                         pixelsPerTileHeight,
-                        fractalProperties.maxIterations
+                        100
                     )
                 )
 
                 val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
-                fractalPixels.add(fractalFuture)
+                fractalTiles.add(fractalFuture)
             }
         }
 
-        for ((index, future) in fractalPixels.withIndex()) {
+        for ((index, future) in fractalTiles.withIndex()) {
             val colorResult = future.get()
-
             // Calculate the position in the final image for the current tile
             val startX = (index % numberOfTilesWidth) * pixelsPerTileWidth
             val startY = (index / numberOfTilesWidth) * pixelsPerTileHeight
+
+//            println("Tile $index: Calculated startX=$startX, startY=$startY")
 
             // Set the color of each pixel in the tile to the corresponding position in the final image
             for (x in 0 until pixelsPerTileWidth) {
