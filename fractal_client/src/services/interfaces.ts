@@ -2,6 +2,7 @@ export interface FractalProperties {
   centerX: number;
   centerY: number;
   scale: number;
-  resolution: number;
+  width: number;
+  height: number;
   maxIterations: number;
 }
