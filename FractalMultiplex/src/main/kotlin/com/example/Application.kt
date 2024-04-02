@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.cache.HistoryHandler
 import com.example.fractalGenerator.standardPool.FractalGenerator
 import com.example.fractalGenerator.customPool.PoolFractalGenerator
 import com.example.plugins.*
@@ -19,9 +20,10 @@ fun Application.module() {
     val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
     val poolFractalGenerator = PoolFractalGenerator()
     val fractalGenerator = FractalGenerator(threadPool)
+    val historique = HistoryHandler()
 
     configureHTTP()
     configureSerialization()
     configureTemplating()
-    configureRouting(fractalGenerator, poolFractalGenerator)
+    configureRouting(fractalGenerator, poolFractalGenerator, historique)
 }

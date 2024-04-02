@@ -5,6 +5,8 @@ import {
   updateFractalPosition,
   saveFractal,
   generateFractalWithCustomPool,
+  undoRequest,
+  redoRequest,
 } from "../../services/service";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FractalProperties } from "../../services/interfaces";
@@ -148,6 +150,41 @@ const Dashboard = () => {
     }
   };
 
+  const undo = async () => {
+    try {
+      const updateFractalResponse: any = await undoRequest(
+      );
+
+      if (!(updateFractalResponse instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      const newUrl = URL.createObjectURL(updateFractalResponse);
+      setIsLoading(false);
+      setFractalImg(newUrl);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const redo = async () => {
+    try {
+      const updateFractalResponse: any = await redoRequest(
+      );
+
+      if (!(updateFractalResponse instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      const newUrl = URL.createObjectURL(updateFractalResponse);
+      setIsLoading(false);
+      setFractalImg(newUrl);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
+
   const generateCustomSizeFractal = async (size: string) => {
     setIsLoading(true);
 
@@ -236,6 +273,8 @@ const Dashboard = () => {
                 generateFractalWithCustomTP={generateFractalWithCustomTP}
                 handleSaveFractal={handleSaveFractal}
                 generateCustomSizeFractal={generateCustomSizeFractal}
+                undo={undo}
+                redo={redo}
               />
             </Box>
           </Box>

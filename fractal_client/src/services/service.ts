@@ -32,6 +32,34 @@ export const updateFractalPosition = async (
   } catch (error) {}
 };
 
+
+export const undoRequest = async (
+) => {
+  try {
+    const response: any = await axios.get(
+      "http://localhost:8080/undo",
+      { responseType: "arraybuffer" }
+    );
+
+    const responseBlob = new Blob([response.data], { type: "image/jpeg" });
+    return responseBlob;
+  } catch (error) {}
+};
+
+
+export const redoRequest = async (
+  ) => {
+    try {
+      const response: any = await axios.get(
+        "http://localhost:8080/redo",
+        { responseType: "arraybuffer" }
+      );
+  
+      const responseBlob = new Blob([response.data], { type: "image/jpeg" });
+      return responseBlob;
+    } catch (error) {}
+  };
+
 export const saveFractal = async (fractalProperties: FractalProperties) => {
   try {
     await axios.post("http://localhost:8080/savefractal", fractalProperties);

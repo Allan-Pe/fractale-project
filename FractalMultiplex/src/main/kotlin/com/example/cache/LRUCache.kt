@@ -54,6 +54,10 @@ class Cache<T>(val capacity: Int) : LRUCache<T> {
         cache[key] = value
     }
 
+    fun getSize(): Int {
+        return cache.size
+    }
+
     fun copy(): Cache<T> {
         val copiedCache = Cache<T>(capacity)
         copiedCache.cache.putAll(cache)
@@ -70,11 +74,11 @@ class Cache<T>(val capacity: Int) : LRUCache<T> {
 
 class HistoryHandler(){
     var history = History()
-    var stateHistory = mutableListOf(History.Memento(Cache<String>(4)))
+    var stateHistory = mutableListOf(History.Memento(Cache<ByteArray>(4)))
     var curentIndex= 1
     var activeIndex= stateHistory.size-1
 
-    fun addElementToCache(element: String){
+    fun addElementToCache(element: ByteArray){
         if (activeIndex < stateHistory.size - 1) {
             stateHistory = stateHistory.slice(0..activeIndex).toMutableList()
             history.restore(stateHistory.last())
@@ -127,18 +131,18 @@ fun main() {
 //    println(cache.getElementBefore(2))
 //    println(cache.getElementAfter(1))
 
-    val historique = HistoryHandler()
-    historique.addElementToCache("element1")
-    historique.addElementToCache("element2")
-    historique.addElementToCache("element3")
-    historique.addElementToCache("element4")
-    historique.getAll()
-    historique.undo()
-    historique.undo()
-    historique.getAll()
-    historique.addElementToCache("element4")
-    historique.getAll()
-    historique.redo()
+//    val historique = HistoryHandler()
+//    historique.addElementToCache("element1")
+//    historique.addElementToCache("element2")
+//    historique.addElementToCache("element3")
+//    historique.addElementToCache("element4")
+//    historique.getAll()
+//    historique.undo()
+//    historique.undo()
+//    historique.getAll()
+//    historique.addElementToCache("element4")
+//    historique.getAll()
+//    historique.redo()
 
 
 
