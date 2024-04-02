@@ -20,13 +20,10 @@ const StatsScreen = ({}) => {
 
   const getData = async () => {
     const response: Stats = await getstats();
-
-    console.log(response);
-
     setStats(response);
   };
 
-  // setTimeout(getData, 200);
+  setTimeout(getData, 200);
 
   useEffect(() => {
     getData();

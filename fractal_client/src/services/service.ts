@@ -50,3 +50,20 @@ export const getstats = async () => {
     console.log(error);
   }
 };
+
+export const generateFractalWithCustomPool = async (
+  fractalProperties: FractalProperties
+) => {
+  try {
+    const response: any = await axios.post(
+      "http://localhost:8080/generatenewfractalthreadpool",
+      fractalProperties,
+      { responseType: "arraybuffer" }
+    );
+
+    const responseBlob = new Blob([response.data], { type: "image/jpeg" });
+    return responseBlob;
+  } catch (error) {
+    console.log(error);
+  }
+};
