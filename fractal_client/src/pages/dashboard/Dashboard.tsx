@@ -18,9 +18,9 @@ const Dashboard = () => {
       centerX: 0.0,
       centerY: 0.0,
       scale: 4.0,
-      width: 100,
-      height: 100,
-      maxIterations: 100,
+      width: 1000,
+      height: 1000,
+      maxIterations: 1000,
     }
   );
 

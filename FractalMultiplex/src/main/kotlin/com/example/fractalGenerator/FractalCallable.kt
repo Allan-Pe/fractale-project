@@ -10,9 +10,9 @@ class FractalCallable(
 ) : Callable<Color> {
     override fun call(): Color {
         val x =
-            (fractalTileProperties.startXcol - fractalTileProperties.pixelsPerTileWidth / 2) * fractalTileProperties.scale / fractalTileProperties.pixelsPerTileHeight + fractalTileProperties.centerX
+            (fractalTileProperties.col - fractalTileProperties.height / 2) * fractalTileProperties.scale / fractalTileProperties.height + fractalTileProperties.centerX
         val y =
-            (fractalTileProperties.startYrow - fractalTileProperties.pixelsPerTileHeight / 2) * fractalTileProperties.scale / fractalTileProperties.pixelsPerTileHeight + fractalTileProperties.centerY
+            (fractalTileProperties.row - fractalTileProperties.height / 2) * fractalTileProperties.scale / fractalTileProperties.height + fractalTileProperties.centerY
         val color = isInMandelbrotSet(x, y, fractalTileProperties.maxIterations)
         return color
     }
