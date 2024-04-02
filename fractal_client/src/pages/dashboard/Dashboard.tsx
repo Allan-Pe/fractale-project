@@ -7,6 +7,7 @@ import {
 } from "../../services/service";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FractalProperties } from "../../services/interfaces";
+import StatsScreen from "../../components/Monitoring";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,9 +35,6 @@ const Dashboard = () => {
 
       const url = URL.createObjectURL(response);
       setFractalImg(url);
-
-      // Optionally, revoke the URL to free up memory when not needed anymore
-      // URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -121,7 +119,8 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ position: "relative" }}>
+      <StatsScreen />
       <Box
         sx={{
           display: "flex",
@@ -145,7 +144,7 @@ const Dashboard = () => {
             src={fractalImg}
           />
         )}
-        <Button onClick={() => handleSaveFractal()}>Save me</Button>
+        <Button onClick={() => saveFractal(fractalProperties)}>Save me</Button>
       </Box>
     </Box>
   );

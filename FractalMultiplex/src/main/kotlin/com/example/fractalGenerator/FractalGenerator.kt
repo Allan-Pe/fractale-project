@@ -10,13 +10,16 @@ import java.util.concurrent.Future
 import javax.imageio.ImageIO
 
 class FractalGenerator(private val threadPool: ExecutorService) {
+    val stats = FractalStats()
     fun generateFractal(fractalProperties: FractalProperties): BufferedImage {
+        val start = System.currentTimeMillis()
         val fractalImage =
             BufferedImage(fractalProperties.width, fractalProperties.height, BufferedImage.TYPE_INT_RGB)
         val fractalTiles = mutableListOf<Future<Color>>()
 
         for (row in 0 until fractalProperties.width) {
             for (col in 0 until fractalProperties.height) {
+                val startTask = System.currentTimeMillis()
                 val newCallableFractal = FractalCallable(
                     FractalTileProperties(
                         row,
@@ -32,6 +35,9 @@ class FractalGenerator(private val threadPool: ExecutorService) {
 
                 val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
                 fractalTiles.add(fractalFuture)
+                val endTimeTask = System.currentTimeMillis()
+                val generationTimeTask = endTimeTask - start
+                stats.addTask(generationTimeTask)
             }
         }
 
@@ -43,6 +49,9 @@ class FractalGenerator(private val threadPool: ExecutorService) {
             fractalImage.setRGB(startX, startY , colorResult.rgb)
         }
 
+        val endTime = System.currentTimeMillis()
+        val generationTime = endTime - start
+        stats.addImage(generationTime, fractalProperties.width)
         return fractalImage
     }
 

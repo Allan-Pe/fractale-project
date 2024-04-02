@@ -8,7 +8,17 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+
+@Serializable
+data class FractalStatsDto(
+    val timeImage: Long,
+    val averageTimeImage: Long,
+    val averageTimeTask: Long,
+    val iteration: Int
+)
 
 
 fun Application.configureRouting(fractalGenerator: FractalGenerator) {
@@ -32,6 +42,20 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator) {
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
             fractalGenerator.saveFractalasJpeg(fractalProperties)
             call.respondText("image save")
+        }
+
+        get("/getstats") {
+
+            val responseStats = FractalStatsDto(
+                timeImage = fractalGenerator.stats.timeThisImage,
+                averageTimeImage = fractalGenerator.stats.averageGenerationTime(),
+                averageTimeTask = fractalGenerator.stats.averageGenerationTimeTask(),
+                iteration = fractalGenerator.stats.totalIterations,
+            )
+
+            val jsonStats = Json.encodeToString(responseStats)
+
+            call.respondText(jsonStats, ContentType.Application.Json)
         }
     }
 }

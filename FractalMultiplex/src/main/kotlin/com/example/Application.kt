@@ -18,6 +18,8 @@ fun Application.module() {
     val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
     val fractalGenerator = FractalGenerator(threadPool)
 
+//    // 'Any' must be changed for the value type of our returned result
+//    val fractalPixels = mutableListOf<Future<Any>>()
     configureHTTP()
     configureSerialization()
     configureTemplating()
