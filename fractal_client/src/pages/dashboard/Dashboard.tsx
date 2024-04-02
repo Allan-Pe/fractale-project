@@ -11,10 +11,13 @@ import { FractalProperties } from "../../services/interfaces";
 import StatsScreen from "../../components/Monitoring";
 import "./Dashboard.css";
 import { SizeSelection } from "../../components/SizeSelection";
+import { ClusterComponent } from "../../components/clusterComponent";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [fractalImg, setFractalImg] = useState<string>();
+  const [fractalImg, setFractalImg] = useState<string>("");
+  const [easterEggSt, setEasterEggSt] = useState<string>("");
+  const [displayEE, setDisplayEE] = useState<boolean>(false);
   const [movementDistanceCorrector, setMovementDistanceCorrector] =
     useState<number>(1.0);
   const [fractalProperties, setFractalProperties] = useState<FractalProperties>(
@@ -44,6 +47,10 @@ const Dashboard = () => {
   };
 
   const handleSaveFractal = () => {
+    if (easterEggSt === "EG") {
+      setDisplayEE(true);
+    }
+
     saveFractal(fractalProperties);
   };
 
@@ -155,6 +162,10 @@ const Dashboard = () => {
   };
 
   const generateCustomSizeFractal = async (size: string) => {
+    if (easterEggSt === "EG") {
+      setEasterEggSt("");
+    }
+
     setIsLoading(true);
 
     const customSizeFractalProperties: FractalProperties = {
@@ -182,6 +193,10 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const easterEgg = (value: string) => {
+    setEasterEggSt(value);
   };
 
   useEffect(() => {
@@ -213,6 +228,7 @@ const Dashboard = () => {
         }}
       >
         <Typography variant="h3">Fractal Multiplex</Typography>
+        <Button onClick={() => console.log(easterEggSt)}>TEST</Button>
         <Typography
           variant="h4"
           sx={{ marginTop: "1rem", marginBottom: "4rem" }}
@@ -242,11 +258,13 @@ const Dashboard = () => {
                 generateFractalWithCustomTP={generateFractalWithCustomTP}
                 handleSaveFractal={handleSaveFractal}
                 generateCustomSizeFractal={generateCustomSizeFractal}
+                easterEgg={easterEgg}
               />
             </Box>
           </Box>
         )}
       </Box>
+      {displayEE === true ? <ClusterComponent /> : ""}
     </Box>
   );
 };

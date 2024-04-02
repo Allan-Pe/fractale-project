@@ -9,10 +9,15 @@ export const SizeSelection = ({
   generateFractalWithCustomTP,
   handleSaveFractal,
   generateCustomSizeFractal,
+  easterEgg,
 }: any) => {
   const [fractalSize, setFractalSize] = useState<string>("");
 
   const handleChangeWidth = (event: SelectChangeEvent) => {
+    if ((event.target.value as string) == "100") {
+      easterEgg("EG");
+    }
+
     setFractalSize(event.target.value as string);
   };
 
