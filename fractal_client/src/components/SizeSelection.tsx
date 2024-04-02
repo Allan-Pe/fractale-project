@@ -3,6 +3,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import { Box, Button } from "@mui/material";
+import { getJulia } from "../services/service";
 
 export const SizeSelection = ({
   generateOriginalFractal,
@@ -10,6 +11,7 @@ export const SizeSelection = ({
   handleSaveFractal,
   generateCustomSizeFractal,
 }: any) => {
+  
   const [fractalSize, setFractalSize] = useState<string>("");
 
   const handleChangeWidth = (event: SelectChangeEvent) => {
@@ -22,6 +24,16 @@ export const SizeSelection = ({
 
   return (
     <Box sx={{ margin: "1rem" }}>
+      <Button
+        sx={{
+          color: "white",
+          backgroundColor: "#373330",
+          marginBottom: "1rem",
+        }}
+        onClick={() => getJulia()}
+      >
+        Julia
+      </Button>
       <Box
         sx={{
           display: "flex",

@@ -63,3 +63,12 @@ export const generateFractalWithCustomPool = async (
     console.log(error);
   }
 };
+
+export const getJulia = async () => {
+  try {
+    const response = await axios.get("http://localhost:8080/julia");
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

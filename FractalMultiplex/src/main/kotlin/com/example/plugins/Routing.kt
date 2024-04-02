@@ -65,5 +65,10 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractal
             val byteArray = convertImageToByteArray(fullFractalImage)
             call.respondBytes(byteArray, ContentType.Image.JPEG)
         }
+
+        get("/julia") {
+            fractalGenerator.isJuliaTrue= !fractalGenerator.isJuliaTrue
+            call.respondText(fractalGenerator.isJuliaTrue.toString())
+        }
     }
 }
