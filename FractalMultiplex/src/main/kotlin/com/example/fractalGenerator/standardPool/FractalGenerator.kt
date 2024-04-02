@@ -24,7 +24,7 @@ class FractalGenerator(private val threadPool: ExecutorService) {
         for (row in 0 until fractalProperties.width) {
             for (col in 0 until fractalProperties.height) {
                 val startTask = System.currentTimeMillis()
-                val newCallableFractal = FractalCallable(
+                val newCallableFractal = FractalCallableJulia(
                     FractalTileProperties(
                         row,
                         col,
