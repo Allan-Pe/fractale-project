@@ -12,6 +12,11 @@ import java.util.concurrent.locks.ReentrantLock
 import javax.imageio.ImageIO
 
 class FractalGenerator(private val threadPool: ExecutorService) {
+    var isJuliaTrue: Boolean = false
+        get() = field
+        set(value) {
+            field = value
+        }
     val lock = ReentrantLock()
     val stats = FractalStats()
     fun generateFractal(fractalProperties: FractalProperties): BufferedImage {
@@ -24,19 +29,33 @@ class FractalGenerator(private val threadPool: ExecutorService) {
         for (row in 0 until fractalProperties.width) {
             for (col in 0 until fractalProperties.height) {
                 val startTask = System.currentTimeMillis()
-                val newCallableFractal = FractalCallable(
-                    FractalTileProperties(
-                        row,
-                        col,
-                        fractalProperties.width,
-                        fractalProperties.height,
-                        fractalProperties.centerX,
-                        fractalProperties.centerY,
-                        fractalProperties.scale,
-                        fractalProperties.maxIterations
+                val newCallableFractal = if(isJuliaTrue){
+                    FractalCallableJulia(
+                        FractalTileProperties(
+                            row,
+                            col,
+                            fractalProperties.width,
+                            fractalProperties.height,
+                            fractalProperties.centerX,
+                            fractalProperties.centerY,
+                            fractalProperties.scale,
+                            fractalProperties.maxIterations
+                        )
                     )
-                )
-
+                } else {
+                    FractalCallable(
+                        FractalTileProperties(
+                            row,
+                            col,
+                            fractalProperties.width,
+                            fractalProperties.height,
+                            fractalProperties.centerX,
+                            fractalProperties.centerY,
+                            fractalProperties.scale,
+                            fractalProperties.maxIterations
+                        )
+                    )
+                }
                 val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
                 fractalTiles.add(fractalFuture)
                 val endTimeTask = System.currentTimeMillis()

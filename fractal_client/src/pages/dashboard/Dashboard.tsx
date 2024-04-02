@@ -70,6 +70,8 @@ const Dashboard = () => {
   };
 
   const calculateNewFractalProperties = (value: string) => {
+    const movementFactor = 0.2;
+
     setFractalProperties((prevFractalProperties) => {
       const newFractalProperties = {
         ...prevFractalProperties,
@@ -77,16 +79,20 @@ const Dashboard = () => {
 
       switch (value) {
         case "d":
-          newFractalProperties.centerX -= movementDistanceCorrector;
+          newFractalProperties.centerX -=
+            movementDistanceCorrector * movementFactor;
           break;
         case "q":
-          newFractalProperties.centerX += movementDistanceCorrector;
+          newFractalProperties.centerX +=
+            movementDistanceCorrector * movementFactor;
           break;
         case "z":
-          newFractalProperties.centerY += movementDistanceCorrector;
+          newFractalProperties.centerY +=
+            movementDistanceCorrector * movementFactor;
           break;
         case "s":
-          newFractalProperties.centerY -= movementDistanceCorrector;
+          newFractalProperties.centerY -=
+            movementDistanceCorrector * movementFactor;
           break;
         case "a":
           setMovementDistanceCorrector((prevValue) => prevValue / 1.2);
