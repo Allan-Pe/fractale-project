@@ -66,8 +66,8 @@ const StatsScreen = ({}) => {
             Statistics
           </Typography>
           <Typography>
-            Time total :{" "}
-            {stats.timeImage === undefined ? "" : stats.averageTimeImage} ms
+            Time total : {stats.timeImage === undefined ? "" : stats.timeImage}{" "}
+            ms
           </Typography>
           <Typography>
             Average time :{" "}
@@ -76,12 +76,12 @@ const StatsScreen = ({}) => {
           </Typography>
           <Typography>
             Average task time :{" "}
-            {stats.averageTimeTask === undefined ? "" : stats.averageTimeImage}{" "}
+            {stats.averageTimeTask === undefined ? "" : stats.averageTimeTask}{" "}
             ms
           </Typography>
           <Typography>
             Number iterations :{" "}
-            {stats.iteration === undefined ? "" : stats.averageTimeImage}
+            {stats.iteration === undefined ? "" : stats.iteration}
           </Typography>
         </Box>
       ) : (

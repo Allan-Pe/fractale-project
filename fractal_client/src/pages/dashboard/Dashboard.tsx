@@ -87,12 +87,12 @@ const Dashboard = () => {
           newFractalProperties.centerY -= movementDistanceCorrector;
           break;
         case "a":
-          setMovementDistanceCorrector((prevValue) => prevValue / 2);
-          newFractalProperties.scale /= 2;
+          setMovementDistanceCorrector((prevValue) => prevValue / 1.2);
+          newFractalProperties.scale /= 1.2;
           break;
         case "e":
-          setMovementDistanceCorrector((prevValue) => prevValue * 2);
-          newFractalProperties.scale *= 2;
+          setMovementDistanceCorrector((prevValue) => prevValue * 1.2);
+          newFractalProperties.scale *= 1.2;
           break;
         default:
           break;
@@ -103,8 +103,6 @@ const Dashboard = () => {
   };
 
   const generateFractalWithCustomTP = async () => {
-    console.log("in custom pool");
-
     try {
       const response: any = await generateFractalWithCustomPool(
         fractalProperties
@@ -201,7 +199,7 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ position: "relative" }}>
-      <StatsScreen />
+      {/* <StatsScreen /> */}
       <Box
         sx={{
           display: "flex",
