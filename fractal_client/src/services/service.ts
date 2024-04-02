@@ -34,17 +34,13 @@ export const updateFractalPosition = async (
 
 export const saveFractal = async (fractalProperties: FractalProperties) => {
   try {
-    const response: any = await axios.post(
-      "http://localhost:8080/savefractal",
-      fractalProperties
-    );
+    await axios.post("http://localhost:8080/savefractal", fractalProperties);
   } catch (error) {}
 };
 
 export const getstats = async () => {
   try {
     const response = await axios.get("http://localhost:8080/getstats");
-
     return response.data;
   } catch (error) {
     console.log(error);

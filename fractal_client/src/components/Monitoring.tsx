@@ -20,7 +20,9 @@ const StatsScreen = ({}) => {
 
   const getData = async () => {
     const response: Stats = await getstats();
-    setStats(response);
+    if (response != undefined) {
+      setStats(response);
+    }
   };
 
   setTimeout(getData, 200);
@@ -63,12 +65,24 @@ const StatsScreen = ({}) => {
           >
             Statistics
           </Typography>
-          <Typography>Time total : {stats.timeImage} ms</Typography>
-          <Typography>Average time : {stats.averageTimeImage} ms</Typography>
           <Typography>
-            Average task time : {stats.averageTimeTask} ms
+            Time total :{" "}
+            {stats.timeImage === undefined ? "" : stats.averageTimeImage} ms
           </Typography>
-          <Typography>Number iterations : {stats.iteration}</Typography>
+          <Typography>
+            Average time :{" "}
+            {stats.averageTimeImage === undefined ? "" : stats.averageTimeImage}{" "}
+            ms
+          </Typography>
+          <Typography>
+            Average task time :{" "}
+            {stats.averageTimeTask === undefined ? "" : stats.averageTimeImage}{" "}
+            ms
+          </Typography>
+          <Typography>
+            Number iterations :{" "}
+            {stats.iteration === undefined ? "" : stats.averageTimeImage}
+          </Typography>
         </Box>
       ) : (
         <Button
