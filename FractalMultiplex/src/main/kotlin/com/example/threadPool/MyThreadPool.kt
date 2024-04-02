@@ -69,25 +69,3 @@ class MyThreadPool<T>(val nbThreads: Int) {
     }
 }
 
-
-class Task : Runnable {
-    override fun run() {
-        println("RUN OK !!!!")
-    }
-}
-
-class Task2 : MyCallable<String> {
-    override fun call(): String {
-        return "CALL OK !!!!"
-    }
-}
-
-fun main() {
-
-    val task = Task2()
-    val executor : MyExecutor<String> = MyThreadPoolExecutor()
-
-    val res = executor.submit(task)
-    println(res.get())
-
-}
