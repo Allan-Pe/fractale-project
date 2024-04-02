@@ -39,15 +39,22 @@ class FractalGenerator(val threadPool: ExecutorService) {
 
     var value: Float = 1f
 
+    val stats = FractalStats()
+
     private val image = BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_RGB)
     fun generateFractal(): BufferedImage {
+        val start = System.currentTimeMillis()
         val fractalPixels = mutableListOf<Future<Color>>()
 
         for (row in 0 until resolution) {
             for (col in 0 until resolution) {
+                val startTask = System.currentTimeMillis()
                 val newCallableFractal = FractalCallable(row, col, resolution, scale, centerX, centerY, maxIterations)
                 val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
                 fractalPixels.add(fractalFuture)
+                val endTimeTask = System.currentTimeMillis()
+                val generationTimeTask = endTimeTask - start
+                stats.addTask(generationTimeTask)
             }
         }
 
@@ -57,6 +64,9 @@ class FractalGenerator(val threadPool: ExecutorService) {
             val row = index / resolution
             image.setRGB(col, row, colorResult.rgb)
         }
+        val endTime = System.currentTimeMillis()
+        val generationTime = endTime - start
+        stats.addImage(generationTime, resolution)
 
         return image
     }
