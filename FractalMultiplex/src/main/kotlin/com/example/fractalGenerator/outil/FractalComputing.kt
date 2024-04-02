@@ -27,8 +27,6 @@ fun isInMandelbrotSet(x: Double, y: Double, maxIterations: Int): Color {
         println("imag value: $imag, real value: $real, current iteration value: $currentIteration")
     }
 
-//    println(currentIteration)
-
     val color = getColor(currentIteration, maxIterations)
     return color
 }

@@ -6,14 +6,14 @@ import java.awt.Color
 import java.util.concurrent.Callable
 
 class FractalCallable(
-    private val fractalTaileProperties: FractalTileProperties
+    private val fractalTileProperties: FractalTileProperties
 ) : Callable<Color> {
     override fun call(): Color {
         val x =
-            (fractalTaileProperties.startXcol - fractalTaileProperties.pixelsPerTileWidth / 2) * fractalTaileProperties.scale / fractalTaileProperties.pixelsPerTileHeight + fractalTaileProperties.centerX
+            (fractalTileProperties.startXcol - fractalTileProperties.pixelsPerTileWidth / 2) * fractalTileProperties.scale / fractalTileProperties.pixelsPerTileHeight + fractalTileProperties.centerX
         val y =
-            (fractalTaileProperties.startYrow - fractalTaileProperties.pixelsPerTileHeight / 2) * fractalTaileProperties.scale / fractalTaileProperties.pixelsPerTileHeight + fractalTaileProperties.centerY
-        val color = isInMandelbrotSet(x, y, fractalTaileProperties.maxIterations)
+            (fractalTileProperties.startYrow - fractalTileProperties.pixelsPerTileHeight / 2) * fractalTileProperties.scale / fractalTileProperties.pixelsPerTileHeight + fractalTileProperties.centerY
+        val color = isInMandelbrotSet(x, y, fractalTileProperties.maxIterations)
         return color
     }
 }

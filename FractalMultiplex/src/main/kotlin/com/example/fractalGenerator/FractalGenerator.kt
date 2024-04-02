@@ -23,15 +23,10 @@ class FractalGenerator(val threadPool: ExecutorService) {
         val numberOfTilesWidth = width / pixelsPerTileWidth
         val numberOfTilesHeight = height / pixelsPerTileHeight
 
-//        println("number of tiles for x: $numberOfTilesWidth, number of tiles for y: $numberOfTilesHeight")
-
-//        println("Number of tiles: $numberOfTilesWidth x $numberOfTilesHeight")
-
         for (row in 0 until numberOfTilesHeight) {
             val startYrow = row * pixelsPerTileHeight
             for (col in 0 until numberOfTilesWidth) {
                 val startXcol = col * pixelsPerTileWidth
-
                 val newCallableFractal = FractalCallable(
                     FractalTileProperties(
                         startYrow,
@@ -56,7 +51,7 @@ class FractalGenerator(val threadPool: ExecutorService) {
             val startX = (index % numberOfTilesWidth) * pixelsPerTileWidth
             val startY = (index / numberOfTilesWidth) * pixelsPerTileHeight
 
-//            println("Tile $index: Calculated startX=$startX, startY=$startY")
+            println("startX value: $startX, startY value: $startY")
 
             // Set the color of each pixel in the tile to the corresponding position in the final image
             for (x in 0 until pixelsPerTileWidth) {
