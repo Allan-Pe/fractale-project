@@ -1,6 +1,7 @@
 package com.example.plugins
 
-import com.example.fractalGenerator.FractalGenerator
+import com.example.fractalGenerator.standardPool.FractalGenerator
+import com.example.fractalGenerator.customPool.PoolFractalGenerator
 import com.example.fractalGenerator.outil.FractalProperties
 import com.example.fractalGenerator.outil.convertImageToByteArray
 import io.ktor.http.*
@@ -21,7 +22,7 @@ data class FractalStatsDto(
 )
 
 
-fun Application.configureRouting(fractalGenerator: FractalGenerator) {
+fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractalGenerator: PoolFractalGenerator) {
     routing {
         post("/generatenewfractal") {
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
@@ -56,6 +57,13 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator) {
             val jsonStats = Json.encodeToString(responseStats)
 
             call.respondText(jsonStats, ContentType.Application.Json)
+        }
+
+        post("/generatenewfractalthreadpool") {
+            val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
+            val fullFractalImage = poolFractalGenerator.generateFractal(fractalProperties)
+            val byteArray = convertImageToByteArray(fullFractalImage)
+            call.respondBytes(byteArray, ContentType.Image.JPEG)
         }
     }
 }

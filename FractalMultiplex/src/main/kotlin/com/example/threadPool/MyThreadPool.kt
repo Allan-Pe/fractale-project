@@ -48,7 +48,6 @@ class MyThreadPool<T>(val nbThreads: Int) {
 
     fun submit(task: MyCallable<T>): Future<T> {
         return addTaskToQueue(task)
-
     }
 
     inner class MyThread(

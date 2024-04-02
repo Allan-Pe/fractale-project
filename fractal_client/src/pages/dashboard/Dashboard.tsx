@@ -4,6 +4,7 @@ import {
   generateFractal,
   updateFractalPosition,
   saveFractal,
+  generateFractalWithCustomPool,
 } from "../../services/service";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FractalProperties } from "../../services/interfaces";
@@ -99,6 +100,27 @@ const Dashboard = () => {
     });
   };
 
+  const generateFractalWithCustomTP = async () => {
+    console.log("in custom pool");
+
+    try {
+      const response: any = await generateFractalWithCustomPool(
+        fractalProperties
+      );
+
+      if (!(response instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      console.log(response);
+
+      const url = URL.createObjectURL(response);
+      setFractalImg(url);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: any) => {
       calculateNewFractalProperties(event.key);
@@ -129,6 +151,9 @@ const Dashboard = () => {
       >
         <Typography variant="h2">Fractal Multiplex</Typography>
         <Typography sx={{ marginTop: "4rem" }}>navigate to infinity</Typography>
+        <Button onClick={() => generateFractalWithCustomTP()}>
+          Generate fractal with custom thread pool
+        </Button>
         {isLoading ? (
           <Box>
             <CircularProgress />

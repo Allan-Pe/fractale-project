@@ -1,4 +1,4 @@
-package com.example.fractalGenerator
+package com.example.fractalGenerator.standardPool
 
 import com.example.fractalGenerator.outil.FractalTileProperties
 import com.example.fractalGenerator.outil.isInMandelbrotSet

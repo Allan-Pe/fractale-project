@@ -1,5 +1,6 @@
-package com.example.fractalGenerator
+package com.example.fractalGenerator.standardPool
 
+import com.example.fractalGenerator.FractalStats
 import com.example.fractalGenerator.outil.FractalProperties
 import com.example.fractalGenerator.outil.FractalTileProperties
 import java.awt.Color
