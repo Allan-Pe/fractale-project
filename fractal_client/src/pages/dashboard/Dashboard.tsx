@@ -9,6 +9,8 @@ import {
 import CircularProgress from "@mui/material/CircularProgress";
 import { FractalProperties } from "../../services/interfaces";
 import StatsScreen from "../../components/Monitoring";
+import "./Dashboard.css";
+import { SizeSelection } from "../../components/SizeSelection";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -112,10 +114,67 @@ const Dashboard = () => {
         throw new Error("Response is not a Blob.");
       }
 
-      console.log(response);
-
       const url = URL.createObjectURL(response);
       setFractalImg(url);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const generateOriginalFractal = async () => {
+    setIsLoading(true);
+    const originalFractal: FractalProperties = {
+      centerX: 0.0,
+      centerY: 0.0,
+      scale: 4.0,
+      width: 1000,
+      height: 1000,
+      maxIterations: 1000,
+    };
+
+    try {
+      const updateFractalResponse: any = await updateFractalPosition(
+        originalFractal
+      );
+
+      if (!(updateFractalResponse instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      const newUrl = URL.createObjectURL(updateFractalResponse);
+      setIsLoading(false);
+      setFractalImg(newUrl);
+      setFractalProperties(originalFractal);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const generateCustomSizeFractal = async (size: string) => {
+    setIsLoading(true);
+
+    const customSizeFractalProperties: FractalProperties = {
+      centerX: 0.0,
+      centerY: 0.0,
+      scale: 4.0,
+      width: parseInt(size),
+      height: parseInt(size),
+      maxIterations: 1000,
+    };
+
+    try {
+      const updateFractalResponse: any = await updateFractalPosition(
+        customSizeFractalProperties
+      );
+
+      if (!(updateFractalResponse instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      const newUrl = URL.createObjectURL(updateFractalResponse);
+      setIsLoading(false);
+      setFractalImg(newUrl);
+      setFractalProperties(customSizeFractalProperties);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -142,34 +201,47 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ position: "relative" }}>
-      <StatsScreen />
+      {/* <StatsScreen /> */}
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
         }}
       >
-        <Typography variant="h2">Fractal Multiplex</Typography>
-        <Typography sx={{ marginTop: "4rem" }}>navigate to infinity</Typography>
-        <Button onClick={() => generateFractalWithCustomTP()}>
-          Generate fractal with custom thread pool
-        </Button>
+        <Typography variant="h3">Fractal Multiplex</Typography>
+        <Typography
+          variant="h4"
+          sx={{ marginTop: "1rem", marginBottom: "4rem" }}
+        >
+          Navigate to infinity
+        </Typography>
+
         {isLoading ? (
           <Box>
             <CircularProgress />
           </Box>
         ) : (
-          <Box
-            component="img"
-            sx={{
-              height: "80vh",
-              width: "80vh",
-            }}
-            alt=""
-            src={fractalImg}
-          />
+          <Box className="image-container">
+            <Box
+              component="img"
+              sx={{
+                height: "80vh",
+                width: "80vh",
+                borderRadius: 10,
+              }}
+              alt=""
+              src={fractalImg}
+            />
+            <Box>
+              <SizeSelection
+                generateOriginalFractal={generateOriginalFractal}
+                generateFractalWithCustomTP={generateFractalWithCustomTP}
+                handleSaveFractal={handleSaveFractal}
+                generateCustomSizeFractal={generateCustomSizeFractal}
+              />
+            </Box>
+          </Box>
         )}
-        <Button onClick={() => handleSaveFractal()}>Save me</Button>
       </Box>
     </Box>
   );
