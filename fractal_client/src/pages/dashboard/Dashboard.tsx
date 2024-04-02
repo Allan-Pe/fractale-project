@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { generateFractal, updateFractalPosition, saveFractal } from "../../services/service";
+import {
+  generateFractal,
+  updateFractalPosition,
+  saveFractal,
+} from "../../services/service";
 import CircularProgress from "@mui/material/CircularProgress";
 import StatsScreen from "../../components/Monitoring";
 
@@ -19,9 +23,6 @@ const Dashboard = () => {
       const url = URL.createObjectURL(response);
       console.log(url);
       setFractalImg(url);
-
-      // Optionally, revoke the URL to free up memory when not needed anymore
-      // URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -83,12 +84,13 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ position: "relative" }}>
-      <StatsScreen/>
-      <Box 
-      sx={{
-        display:"flex",
-        flexDirection: "column"
-      }}>
+      <StatsScreen />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Typography variant="h2">Fractal Multiplex</Typography>
         <Typography sx={{ marginTop: "4rem" }}>navigate to infinity</Typography>
         {isLoading ? (
@@ -101,8 +103,6 @@ const Dashboard = () => {
             sx={{
               height: "80vh",
               width: "80vh",
-              // maxHeight: { xs: 233, md: 167 },
-              // maxWidth: { xs: 350, md: 250 },
             }}
             alt=""
             src={fractalImg}
