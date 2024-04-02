@@ -8,7 +8,14 @@ import javax.imageio.ImageIO
 // This script contains only pure functions
 fun getColor(iterations: Int, maxIterations: Int): Color {
     return when (iterations) {
-        in 0 until maxIterations -> Color.getHSBColor(iterations.toFloat() / maxIterations, 1f, 1f)
+        in 0 until maxIterations -> {
+            val hueStart = 1.75f
+            val hueEnd = 7.2f
+            val hue = hueStart + (hueEnd - hueStart) * (iterations.toFloat() / maxIterations)
+            val saturation = 7.9f
+            val brightness = 9.3f
+            Color.getHSBColor(hue, saturation, brightness)
+        }
         else -> Color.BLACK
     }
 }
