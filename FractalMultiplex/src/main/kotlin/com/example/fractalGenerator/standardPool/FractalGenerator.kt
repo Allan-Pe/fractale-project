@@ -8,12 +8,15 @@ import java.awt.image.BufferedImage
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
+import java.util.concurrent.locks.ReentrantLock
 import javax.imageio.ImageIO
 
 class FractalGenerator(private val threadPool: ExecutorService) {
+    val lock = ReentrantLock()
     val stats = FractalStats()
     fun generateFractal(fractalProperties: FractalProperties): BufferedImage {
         val start = System.currentTimeMillis()
+        lock.lock()
         val fractalImage =
             BufferedImage(fractalProperties.width, fractalProperties.height, BufferedImage.TYPE_INT_RGB)
         val fractalTiles = mutableListOf<Future<Color>>()
@@ -49,10 +52,11 @@ class FractalGenerator(private val threadPool: ExecutorService) {
             val startY = index / fractalProperties.width
             fractalImage.setRGB(startX, startY , colorResult.rgb)
         }
-
+        lock.unlock()
         val endTime = System.currentTimeMillis()
         val generationTime = endTime - start
         stats.addImage(generationTime, fractalProperties.width)
+
         return fractalImage
     }
 
