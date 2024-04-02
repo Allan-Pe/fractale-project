@@ -2,18 +2,15 @@ package com.example.threadPool
 
 import java.util.concurrent.*
 
-
 interface MyCallable<T> : Callable<T> {
-    override fun call() : T
+    override fun call(): T
 }
 
 interface MyExecutor<T> {
     fun submit(callable: MyCallable<T>): Future<T>
-
 }
 
 class MyThreadPoolExecutor<T> : MyExecutor<T> {
-
     private val threadPool = MyThreadPool<T>(Runtime.getRuntime().availableProcessors() * 2 + 1)
     override fun submit(callable: MyCallable<T>): Future<T> {
         return threadPool.submit(callable)
@@ -21,13 +18,10 @@ class MyThreadPoolExecutor<T> : MyExecutor<T> {
 }
 
 class MainExecutorKotlin<T> : MyExecutor<T> {
-
     private val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
     override fun submit(callable: MyCallable<T>): Future<T> {
         return executor.submit(callable)
     }
-
-
 }
 
 class MyThreadPool<T>(val nbThreads: Int) {
@@ -68,4 +62,3 @@ class MyThreadPool<T>(val nbThreads: Int) {
         }
     }
 }
-
