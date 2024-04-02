@@ -144,7 +144,7 @@ const Dashboard = () => {
             src={fractalImg}
           />
         )}
-        <Button onClick={() => saveFractal(fractalProperties)}>Save me</Button>
+        <Button onClick={() => handleSaveFractal()}>Save me</Button>
       </Box>
     </Box>
   );

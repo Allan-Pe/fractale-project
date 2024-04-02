@@ -26,7 +26,7 @@ const StatsScreen = ({}) => {
     setStats(response);
   };
 
-  // setTimeout(getData, 200);
+  setTimeout(getData, 200);
 
   useEffect(() => {
     getData();
