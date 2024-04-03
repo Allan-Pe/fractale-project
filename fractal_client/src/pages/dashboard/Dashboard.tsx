@@ -110,19 +110,19 @@ const Dashboard = () => {
       switch (value) {
         case "d":
           newFractalProperties.centerX -=
-            movementDistanceCorrector * movementFactor;
+            movementFactor * newFractalProperties.scale;
           break;
         case "q":
           newFractalProperties.centerX +=
-            movementDistanceCorrector * movementFactor;
+            movementFactor * newFractalProperties.scale;
           break;
         case "z":
           newFractalProperties.centerY +=
-            movementDistanceCorrector * movementFactor;
+            movementFactor * newFractalProperties.scale;
           break;
         case "s":
           newFractalProperties.centerY -=
-            movementDistanceCorrector * movementFactor;
+            movementFactor * newFractalProperties.scale;
           break;
         case "a":
           setMovementDistanceCorrector((prevValue) => prevValue / 1.2);
@@ -135,7 +135,6 @@ const Dashboard = () => {
         default:
           break;
       }
-
       return newFractalProperties;
     });
   };

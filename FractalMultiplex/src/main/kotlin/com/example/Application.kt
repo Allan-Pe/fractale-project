@@ -18,7 +18,9 @@ fun main() {
 }
 
 fun Application.module() {
-    val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
+    val singleThreadValue = 1
+    val multithreadValue = Runtime.getRuntime().availableProcessors() * 2 + 1
+    val threadPool = Executors.newFixedThreadPool(multithreadValue)
     val poolFractalGenerator = PoolFractalGenerator()
     val fractalGenerator = FractalGenerator(threadPool)
     val cache = Cache<String,ByteArray>(100)
@@ -28,3 +30,4 @@ fun Application.module() {
     configureTemplating()
     configureRouting(fractalGenerator, poolFractalGenerator, cache)
 }
+
