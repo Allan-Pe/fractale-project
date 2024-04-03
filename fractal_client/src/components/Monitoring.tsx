@@ -75,9 +75,8 @@ const StatsScreen = ({}) => {
             ms
           </Typography>
           <Typography>
-            Average task time :{" "}
-            {stats.averageTimeTask === undefined ? "" : stats.averageTimeTask}{" "}
-            ms
+            Average task time:{" "}
+            {stats.averageTimeTask === undefined ? "" : stats.averageTimeTask.toFixed(6)} ms
           </Typography>
           <Typography>
             Number iterations :{" "}

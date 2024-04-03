@@ -42,3 +42,20 @@ fun convertImageToByteArray(image: BufferedImage): ByteArray {
     ImageIO.write(image, "jpg", outputStream)
     return outputStream.toByteArray()
 }
+
+fun juliaColor(x: Double, y: Double, maxIterations: Int): Color {
+    val cReal = -0.7
+    val cImaginary = 0.27015
+    var zx = x
+    var zy = y
+    var iteration = 0
+
+    while (zx * zx + zy * zy < 4 && iteration < maxIterations) {
+        val temp = zx * zx - zy * zy + cReal
+        zy = 2.0 * zx * zy + cImaginary
+        zx = temp
+        iteration++
+    }
+
+    return Color(iteration % 256, iteration % 256, iteration % 256)
+}
