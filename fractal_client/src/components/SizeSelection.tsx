@@ -10,6 +10,8 @@ export const SizeSelection = ({
   generateFractalWithCustomTP,
   handleSaveFractal,
   generateCustomSizeFractal,
+  undo,
+  redo,
 }: any) => {
   
   const [fractalSize, setFractalSize] = useState<string>("");
@@ -85,10 +87,35 @@ export const SizeSelection = ({
           </Button>
         </Box>
       </Box>
+      <Box sx={{ marginTop:"2rem",display: "flex", flexDirection:"row", justifyContent:"space-around"}}>
+      <Button
+          sx={{
+            color: "white",
+            backgroundColor: "#373330",
+            width: "150px",
+            marginBottom: "1rem",
+          }}
+          onClick={() => undo()}
+        >
+          Undo
+        </Button>
+        <Button
+          sx={{
+            color: "white",
+            backgroundColor: "#373330",
+            width: "150px",
+            marginBottom: "1rem",
+          }}
+          onClick={() => redo()}
+        >
+          Redo
+        </Button>
+        </Box>
       <Box
         className="genericFlexClass"
-        sx={{ margin: "2rem", marginTop: "4rem" }}
-      >
+        sx={{ margin: "2rem", marginTop: "3rem" }}
+      > 
+      
         <Button
           sx={{
             color: "white",
@@ -113,6 +140,7 @@ export const SizeSelection = ({
         >
           Save this fractal
         </Button>
+       
       </Box>
     </Box>
   );

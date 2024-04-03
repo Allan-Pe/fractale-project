@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.cache.HistoryHandler
 import com.example.fractalGenerator.standardPool.FractalGenerator
 import com.example.fractalGenerator.customPool.PoolFractalGenerator
 import com.example.fractalGenerator.outil.FractalProperties
@@ -22,21 +23,40 @@ data class FractalStatsDto(
 )
 
 
-fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractalGenerator: PoolFractalGenerator) {
+fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractalGenerator: PoolFractalGenerator, historyHandler: HistoryHandler) {
     routing {
         post("/generatenewfractal") {
+            println("generate called")
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
             val fullFractalImage = fractalGenerator.generateFractal(fractalProperties)
             val byteArray = convertImageToByteArray(fullFractalImage)
-            call.respondBytes(byteArray, ContentType.Image.JPEG)
+            historyHandler.history.cache.clear()
+            historyHandler.addElementToCache(byteArray)
+            call.respondBytes(historyHandler.history.cache.getLastElement()!!, ContentType.Image.JPEG)
         }
 
         post("/updatefractal") {
+            println("update called")
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
             val updatedFractalImage =
                 fractalGenerator.generateFractal(fractalProperties)
             val byteArray = convertImageToByteArray(updatedFractalImage)
-            call.respondBytes(byteArray, ContentType.Image.JPEG)
+            historyHandler.addElementToCache(byteArray)
+            call.respondBytes( historyHandler.history.cache.getLastElement()!!, ContentType.Image.JPEG)
+        }
+
+        get("/undo") {
+            println("undo called")
+            historyHandler.undo()
+            println(historyHandler.history.cache.getLastElement())
+            call.respondBytes( historyHandler.history.cache.getLastElement()!!, ContentType.Image.JPEG)
+        }
+
+        get("/redo") {
+            println("redo called")
+            historyHandler.redo()
+            println(historyHandler.history.cache.getLastElement())
+            call.respondBytes( historyHandler.history.cache.getLastElement()!!, ContentType.Image.JPEG)
         }
 
         post("/savefractal") {
