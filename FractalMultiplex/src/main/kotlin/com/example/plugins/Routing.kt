@@ -1,6 +1,6 @@
 package com.example.plugins
 
-import com.example.cache.HistoryHandler
+import com.example.cache.Cache
 import com.example.fractalGenerator.standardPool.FractalGenerator
 import com.example.fractalGenerator.customPool.PoolFractalGenerator
 import com.example.fractalGenerator.outil.FractalProperties
@@ -23,16 +23,16 @@ data class FractalStatsDto(
 )
 
 
-fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractalGenerator: PoolFractalGenerator, historyHandler: HistoryHandler) {
+fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractalGenerator: PoolFractalGenerator, cache: Cache<String, ByteArray>) {
     routing {
         post("/generatenewfractal") {
             println("generate called")
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
             val fullFractalImage = fractalGenerator.generateFractal(fractalProperties)
             val byteArray = convertImageToByteArray(fullFractalImage)
-            historyHandler.history.cache.clear()
-            historyHandler.addElementToCache(byteArray)
-            call.respondBytes(historyHandler.history.cache.getLastElement()!!, ContentType.Image.JPEG)
+            val key = cache.changeToKey(fractalProperties)
+            cache.put(key, byteArray)
+            call.respondBytes(cache.getLastElement()!!, ContentType.Image.JPEG)
         }
 
         post("/updatefractal") {
@@ -41,22 +41,28 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractal
             val updatedFractalImage =
                 fractalGenerator.generateFractal(fractalProperties)
             val byteArray = convertImageToByteArray(updatedFractalImage)
-            historyHandler.addElementToCache(byteArray)
-            call.respondBytes( historyHandler.history.cache.getLastElement()!!, ContentType.Image.JPEG)
+            val key = cache.changeToKey(fractalProperties)
+            cache.put(key, byteArray)
+            call.respondBytes(cache.getLastElement()!!, ContentType.Image.JPEG)
         }
 
-        get("/undo") {
+        post("/undo") {
             println("undo called")
-            historyHandler.undo()
-            println(historyHandler.history.cache.getLastElement())
-            call.respondBytes( historyHandler.history.cache.getLastElement()!!, ContentType.Image.JPEG)
+            val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
+            println("IN UNDO ////////////////////////////:")
+            println(fractalProperties)
+            val key = cache.changeToKey(fractalProperties)
+            val byteArray = cache.get(key)
+            call.respondBytes(byteArray!!, ContentType.Image.JPEG)
+
         }
 
-        get("/redo") {
+        post("/redo") {
             println("redo called")
-            historyHandler.redo()
-            println(historyHandler.history.cache.getLastElement())
-            call.respondBytes( historyHandler.history.cache.getLastElement()!!, ContentType.Image.JPEG)
+            val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
+            val key = cache.changeToKey(fractalProperties)
+            val byteArray = cache.get(key)
+            call.respondBytes(byteArray!!, ContentType.Image.JPEG)
         }
 
         post("/savefractal") {

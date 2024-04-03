@@ -1,8 +1,9 @@
 package com.example
 
-import com.example.cache.HistoryHandler
+import com.example.cache.Cache
 import com.example.fractalGenerator.standardPool.FractalGenerator
 import com.example.fractalGenerator.customPool.PoolFractalGenerator
+import com.example.fractalGenerator.outil.FractalProperties
 import com.example.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -20,10 +21,10 @@ fun Application.module() {
     val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
     val poolFractalGenerator = PoolFractalGenerator()
     val fractalGenerator = FractalGenerator(threadPool)
-    val historique = HistoryHandler()
+    val cache = Cache<String,ByteArray>(100)
 
     configureHTTP()
     configureSerialization()
     configureTemplating()
-    configureRouting(fractalGenerator, poolFractalGenerator, historique)
+    configureRouting(fractalGenerator, poolFractalGenerator, cache)
 }

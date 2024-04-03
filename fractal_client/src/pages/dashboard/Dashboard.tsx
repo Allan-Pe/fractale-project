@@ -14,8 +14,10 @@ import StatsScreen from "../../components/Monitoring";
 import "./Dashboard.css";
 import { SizeSelection } from "../../components/SizeSelection";
 import { ClusterComponent } from "../../components/clusterComponent";
+import { Historique } from "../../memento/mementoInstance";
 
 const Dashboard = () => {
+  
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fractalImg, setFractalImg] = useState<string>("");
   const [easterEggSt, setEasterEggSt] = useState<string>("");
@@ -33,6 +35,7 @@ const Dashboard = () => {
     }
   );
 
+  
   const generateStartFractal = async () => {
     try {
       const response: any = await generateFractal(fractalProperties);
@@ -75,6 +78,10 @@ const Dashboard = () => {
     setIsLoading(true);
 
     try {
+      
+      Historique.addElementToCache(fractalProperties); // Ajoute un nouvel élément à l'historique
+      console.log(Historique.history.cache); // Affiche l'historique après l'ajout d'un nouvel élément
+      
       const updateFractalResponse: any = await updateFractalPosition(
         fractalProperties
       );
@@ -86,6 +93,7 @@ const Dashboard = () => {
       const newUrl = URL.createObjectURL(updateFractalResponse);
       setIsLoading(false);
       setFractalImg(newUrl);
+      
     } catch (error) {
       console.error("Error:", error);
     }
@@ -180,7 +188,11 @@ const Dashboard = () => {
 
   const undo = async () => {
     try {
-      const updateFractalResponse: any = await undoRequest();
+      
+      Historique.undo()
+      console.log(Historique.history.cache); 
+      
+      const updateFractalResponse: any = await undoRequest(Historique.history.cache[Historique.history.cache.length-1]);
 
       if (!(updateFractalResponse instanceof Blob)) {
         throw new Error("Response is not a Blob.");
@@ -196,7 +208,10 @@ const Dashboard = () => {
 
   const redo = async () => {
     try {
-      const updateFractalResponse: any = await redoRequest();
+      
+      Historique.redo()
+      console.log(Historique.history.cache); 
+      const updateFractalResponse: any = await redoRequest(Historique.history.cache[Historique.history.cache.length-1]);
 
       if (!(updateFractalResponse instanceof Blob)) {
         throw new Error("Response is not a Blob.");
@@ -245,6 +260,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+
     const handleKeyDown = (event: any) => {
       calculateNewFractalProperties(event.key);
     };

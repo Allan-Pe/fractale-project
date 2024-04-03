@@ -32,22 +32,30 @@ export const updateFractalPosition = async (
   } catch (error) {}
 };
 
-export const undoRequest = async () => {
+export const undoRequest = async (fractalProperties: FractalProperties) => {
   try {
-    const response: any = await axios.get("http://localhost:8080/undo", {
-      responseType: "arraybuffer",
-    });
+    const response: any = await axios.post(
+      "http://localhost:8080/undo",
+      fractalProperties,
+      {
+        responseType: "arraybuffer",
+      }
+    );
 
     const responseBlob = new Blob([response.data], { type: "image/jpeg" });
     return responseBlob;
   } catch (error) {}
 };
 
-export const redoRequest = async () => {
+export const redoRequest = async (fractalProperties: FractalProperties) => {
   try {
-    const response: any = await axios.get("http://localhost:8080/redo", {
-      responseType: "arraybuffer",
-    });
+    const response: any = await axios.post(
+      "http://localhost:8080/redo",
+      fractalProperties,
+      {
+        responseType: "arraybuffer",
+      }
+    );
 
     const responseBlob = new Blob([response.data], { type: "image/jpeg" });
     return responseBlob;

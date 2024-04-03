@@ -1,19 +1,19 @@
 package com.example.cache
 
+import com.example.fractalGenerator.outil.FractalProperties
 import io.pebbletemplates.pebble.node.CacheNode
-
-interface LRUCache<V> {
-    fun get(key: Int): V?
-    fun put(value: V)
-    fun remove(key: Int): V?
+interface LRUCache<K,V> {
+    fun get(key: K): V?
+    fun put(key: K,value: V): V
+    fun remove(key: K): V?
     fun clear()
 }
 
 
-class Cache<T>(val capacity: Int) : LRUCache<T> {
-    var cache = LinkedHashMap<Int, T>(capacity, 0.75f, true)
+class Cache<K,T>(val capacity: Int) : LRUCache<K,T> {
+    var cache = LinkedHashMap<K, T>(capacity, 0.75f, true)
 
-    override fun get(key: Int): T? {
+    override fun get(key: K): T? {
         return cache[key]
     }
 
@@ -35,7 +35,7 @@ class Cache<T>(val capacity: Int) : LRUCache<T> {
         return null
     }
 
-    override fun remove(key: Int): T? {
+    override fun remove(key: K): T? {
         return cache.remove(key)
     }
 
@@ -43,26 +43,31 @@ class Cache<T>(val capacity: Int) : LRUCache<T> {
         cache.clear()
     }
 
-    override fun put(value: T) {
-        var key = cache.size + 1
-        println(key)
+    override fun put(key : K,value: T): T {
+        for ((k,v) in cache){
+            if(k == key){
+                return v
+            }
+        }
         if (cache.size >= capacity) {
             val leastUsedKey = cache.keys.iterator().next()
             cache.remove(leastUsedKey)
-            key = leastUsedKey
         }
         cache[key] = value
+        return value
     }
 
     fun getSize(): Int {
         return cache.size
     }
 
-    fun copy(): Cache<T> {
-        val copiedCache = Cache<T>(capacity)
-        copiedCache.cache.putAll(cache)
-        return copiedCache
+    fun changeToKey(element: FractalProperties): String {
+
+        println("${element.width}-${element.height}-${element.centerX}-${element.centerY}-${element.scale}-${element.maxIterations}")
+         return element.toString()
     }
+
+
 
     override fun toString(): String {
         return "Cache($cache)"
@@ -72,45 +77,6 @@ class Cache<T>(val capacity: Int) : LRUCache<T> {
 }
 
 
-class HistoryHandler(){
-    var history = History()
-    var stateHistory = mutableListOf(History.Memento(Cache<ByteArray>(4)))
-    var curentIndex= 1
-    var activeIndex= stateHistory.size-1
-
-    fun addElementToCache(element: ByteArray){
-        if (activeIndex < stateHistory.size - 1) {
-            stateHistory = stateHistory.slice(0..activeIndex).toMutableList()
-            history.restore(stateHistory.last())
-        }
-        history.cache.put(element)
-        stateHistory.add(history.takeSnapshot())
-        curentIndex++
-        activeIndex++
-    }
-
-    fun undo(){
-        if (activeIndex <= 0) (return)
-        activeIndex -= 1
-        curentIndex -= 1
-        history.restore(stateHistory[activeIndex])
-    }
-
-    fun redo(){
-        if (stateHistory.size <= 0 || activeIndex >= stateHistory.size - 1) (return println("redo fail"))
-        activeIndex += 1
-        curentIndex += 1
-        history.restore(stateHistory[activeIndex])
-    }
-
-    fun getAll(){
-        println("history :${history.cache}")
-        println("stateHistory :${stateHistory}")
-        println("curentIndex :$curentIndex")
-        println("activeIndex :${activeIndex}")
-
-    }
-}
 
 fun main() {
 
