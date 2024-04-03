@@ -3,7 +3,6 @@ package com.example
 import com.example.cache.Cache
 import com.example.fractalGenerator.standardPool.FractalGenerator
 import com.example.fractalGenerator.customPool.PoolFractalGenerator
-import com.example.fractalGenerator.outil.FractalProperties
 import com.example.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
