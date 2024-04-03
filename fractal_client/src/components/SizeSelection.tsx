@@ -3,6 +3,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import { Box, Button } from "@mui/material";
+import { getJulia } from "../services/service";
 
 export const SizeSelection = ({
   generateOriginalFractal,
@@ -10,7 +11,10 @@ export const SizeSelection = ({
   handleSaveFractal,
   generateCustomSizeFractal,
   easterEgg,
+  undo,
+  redo,
 }: any) => {
+
   const [fractalSize, setFractalSize] = useState<string>("");
 
   const handleChangeWidth = (event: SelectChangeEvent) => {
@@ -27,6 +31,16 @@ export const SizeSelection = ({
 
   return (
     <Box sx={{ margin: "1rem" }}>
+      <Button
+        sx={{
+          color: "white",
+          backgroundColor: "#373330",
+          marginBottom: "1rem",
+        }}
+        onClick={() => getJulia()}
+      >
+        Julia
+      </Button>
       <Box
         sx={{
           display: "flex",
@@ -78,9 +92,33 @@ export const SizeSelection = ({
           </Button>
         </Box>
       </Box>
+      <Box sx={{ marginTop:"2rem",display: "flex", flexDirection:"row", justifyContent:"space-around"}}>
+      <Button
+          sx={{
+            color: "white",
+            backgroundColor: "#373330",
+            width: "150px",
+            marginBottom: "1rem",
+          }}
+          onClick={() => undo()}
+        >
+          Undo
+        </Button>
+        <Button
+          sx={{
+            color: "white",
+            backgroundColor: "#373330",
+            width: "150px",
+            marginBottom: "1rem",
+          }}
+          onClick={() => redo()}
+        >
+          Redo
+        </Button>
+        </Box>
       <Box
         className="genericFlexClass"
-        sx={{ margin: "2rem", marginTop: "4rem" }}
+        sx={{ margin: "2rem", marginTop: "3rem" }}
       >
         <Button
           sx={{

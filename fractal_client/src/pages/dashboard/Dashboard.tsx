@@ -161,11 +161,42 @@ const Dashboard = () => {
     }
   };
 
-  const generateCustomSizeFractal = async (size: string) => {
-    if (easterEggSt === "EG") {
-      setEasterEggSt("");
-    }
+  const undo = async () => {
+    try {
+      const updateFractalResponse: any = await undoRequest(
+      );
 
+      if (!(updateFractalResponse instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      const newUrl = URL.createObjectURL(updateFractalResponse);
+      setIsLoading(false);
+      setFractalImg(newUrl);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const redo = async () => {
+    try {
+      const updateFractalResponse: any = await redoRequest(
+      );
+
+      if (!(updateFractalResponse instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      const newUrl = URL.createObjectURL(updateFractalResponse);
+      setIsLoading(false);
+      setFractalImg(newUrl);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+
+  const generateCustomSizeFractal = async (size: string) => {
     setIsLoading(true);
 
     const customSizeFractalProperties: FractalProperties = {
@@ -218,6 +249,50 @@ const Dashboard = () => {
     generateStartFractal();
   }, []);
 
+  useEffect(() => {
+    let intervalId: number;
+
+    const handleGamepadInput = () => {
+      const gamepads = navigator.getGamepads();
+      const gamepad = gamepads[0];
+
+      if (gamepad!.buttons[0].pressed === true) {
+        calculateNewFractalProperties("a");
+      }
+
+      if (gamepad!.buttons[2].pressed === true) {
+        calculateNewFractalProperties("e");
+      }
+
+      if (gamepad!.buttons[12].pressed === true) {
+        calculateNewFractalProperties("s");
+      }
+
+      if (gamepad!.buttons[13].pressed === true) {
+        calculateNewFractalProperties("z");
+      }
+
+      if (gamepad!.buttons[14].pressed === true) {
+        calculateNewFractalProperties("d");
+      }
+
+      if (gamepad!.buttons[15].pressed === true) {
+        calculateNewFractalProperties("q");
+      }
+    };
+
+    const startCheckingGamepadInput = () => {
+      intervalId = setInterval(handleGamepadInput, 100);
+    };
+
+    window.addEventListener("gamepadconnected", startCheckingGamepadInput);
+
+    return () => {
+      window.removeEventListener("gamepadconnected", startCheckingGamepadInput);
+      clearInterval(intervalId);
+    };
+  }, []);
+
   return (
     <Box sx={{ position: "relative" }}>
       {/* <StatsScreen /> */}
@@ -228,7 +303,6 @@ const Dashboard = () => {
         }}
       >
         <Typography variant="h3">Fractal Multiplex</Typography>
-        <Button onClick={() => console.log(easterEggSt)}>TEST</Button>
         <Typography
           variant="h4"
           sx={{ marginTop: "1rem", marginBottom: "4rem" }}
@@ -259,6 +333,8 @@ const Dashboard = () => {
                 handleSaveFractal={handleSaveFractal}
                 generateCustomSizeFractal={generateCustomSizeFractal}
                 easterEgg={easterEgg}
+                undo={undo}
+                redo={redo}
               />
             </Box>
           </Box>

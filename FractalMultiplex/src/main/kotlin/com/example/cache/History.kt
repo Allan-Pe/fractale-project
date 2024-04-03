@@ -1,7 +1,7 @@
 package com.example.cache
 
 class History {
-    var cache = Cache<String>(4)
+    var cache = Cache<ByteArray>(4)
 
     fun takeSnapshot(): Memento {
         // println("snapshot" + listOrder)
@@ -13,7 +13,7 @@ class History {
 
     }
 
-    class Memento( cacheSave: Cache<String>) {
+    class Memento( cacheSave: Cache<ByteArray>) {
         val cache = cacheSave
     }
 }

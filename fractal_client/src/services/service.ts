@@ -32,6 +32,34 @@ export const updateFractalPosition = async (
   } catch (error) {}
 };
 
+
+export const undoRequest = async (
+) => {
+  try {
+    const response: any = await axios.get(
+      "http://localhost:8080/undo",
+      { responseType: "arraybuffer" }
+    );
+
+    const responseBlob = new Blob([response.data], { type: "image/jpeg" });
+    return responseBlob;
+  } catch (error) {}
+};
+
+
+export const redoRequest = async (
+  ) => {
+    try {
+      const response: any = await axios.get(
+        "http://localhost:8080/redo",
+        { responseType: "arraybuffer" }
+      );
+  
+      const responseBlob = new Blob([response.data], { type: "image/jpeg" });
+      return responseBlob;
+    } catch (error) {}
+  };
+
 export const saveFractal = async (fractalProperties: FractalProperties) => {
   try {
     await axios.post("http://localhost:8080/savefractal", fractalProperties);
@@ -59,6 +87,15 @@ export const generateFractalWithCustomPool = async (
 
     const responseBlob = new Blob([response.data], { type: "image/jpeg" });
     return responseBlob;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getJulia = async () => {
+  try {
+    const response = await axios.get("http://localhost:8080/julia");
+    return response.data;
   } catch (error) {
     console.log(error);
   }
