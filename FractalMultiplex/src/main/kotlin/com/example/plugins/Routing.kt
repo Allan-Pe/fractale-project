@@ -26,24 +26,22 @@ data class FractalStatsDto(
 fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractalGenerator: PoolFractalGenerator, cache: Cache<String, ByteArray>) {
     routing {
         post("/generatenewfractal") {
-            println("generate called")
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
             val fullFractalImage = fractalGenerator.generateFractal(fractalProperties)
             val byteArray = convertImageToByteArray(fullFractalImage)
             val key = cache.changeToKey(fractalProperties)
             cache.put(key, byteArray)
-            call.respondBytes(cache.getLastElement()!!, ContentType.Image.JPEG)
+            call.respondBytes(byteArray, ContentType.Image.JPEG)
         }
 
         post("/updatefractal") {
-            println("update called")
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
             val updatedFractalImage =
                 fractalGenerator.generateFractal(fractalProperties)
             val byteArray = convertImageToByteArray(updatedFractalImage)
             val key = cache.changeToKey(fractalProperties)
             cache.put(key, byteArray)
-            call.respondBytes(cache.getLastElement()!!, ContentType.Image.JPEG)
+            call.respondBytes(byteArray, ContentType.Image.JPEG)
         }
 
         post("/undo") {
