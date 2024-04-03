@@ -48,6 +48,21 @@ const Dashboard = () => {
     }
   };
 
+  const generateCurrentImgWithJulia = async () => {
+    try {
+      const response: any = await generateFractal(fractalProperties);
+
+      if (!(response instanceof Blob)) {
+        throw new Error("Response is not a Blob.");
+      }
+
+      const url = URL.createObjectURL(response);
+      setFractalImg(url);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const handleSaveFractal = () => {
     if (easterEggSt === "EG") {
       setDisplayEE(true);
@@ -280,14 +295,14 @@ const Dashboard = () => {
       }
     };
 
-    const startCheckingGamepadInput = () => {
+    const checkPadInputChange = () => {
       intervalId = setInterval(handleGamepadInput, 100);
     };
 
-    window.addEventListener("gamepadconnected", startCheckingGamepadInput);
+    window.addEventListener("gamepadconnected", checkPadInputChange);
 
     return () => {
-      window.removeEventListener("gamepadconnected", startCheckingGamepadInput);
+      window.removeEventListener("gamepadconnected", checkPadInputChange);
       clearInterval(intervalId);
     };
   }, []);
@@ -332,6 +347,7 @@ const Dashboard = () => {
                 handleSaveFractal={handleSaveFractal}
                 generateCustomSizeFractal={generateCustomSizeFractal}
                 easterEgg={easterEgg}
+                generateCurrentImgWithJulia={generateCurrentImgWithJulia}
                 undo={undo}
                 redo={redo}
               />

@@ -11,10 +11,10 @@ export const SizeSelection = ({
   handleSaveFractal,
   generateCustomSizeFractal,
   easterEgg,
+  generateCurrentImgWithJulia,
   undo,
   redo,
 }: any) => {
-
   const [fractalSize, setFractalSize] = useState<string>("");
 
   const handleChangeWidth = (event: SelectChangeEvent) => {
@@ -29,6 +29,11 @@ export const SizeSelection = ({
     generateCustomSizeFractal(fractalSize);
   };
 
+  const handleJulia = async () => {
+    await getJulia();
+    generateCurrentImgWithJulia();
+  };
+
   return (
     <Box sx={{ margin: "1rem" }}>
       <Button
@@ -37,7 +42,7 @@ export const SizeSelection = ({
           backgroundColor: "#373330",
           marginBottom: "1rem",
         }}
-        onClick={() => getJulia()}
+        onClick={() => handleJulia()}
       >
         Julia
       </Button>
@@ -92,8 +97,15 @@ export const SizeSelection = ({
           </Button>
         </Box>
       </Box>
-      <Box sx={{ marginTop:"2rem",display: "flex", flexDirection:"row", justifyContent:"space-around"}}>
-      <Button
+      <Box
+        sx={{
+          marginTop: "2rem",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+        }}
+      >
+        <Button
           sx={{
             color: "white",
             backgroundColor: "#373330",
@@ -115,7 +127,7 @@ export const SizeSelection = ({
         >
           Redo
         </Button>
-        </Box>
+      </Box>
       <Box
         className="genericFlexClass"
         sx={{ margin: "2rem", marginTop: "3rem" }}
