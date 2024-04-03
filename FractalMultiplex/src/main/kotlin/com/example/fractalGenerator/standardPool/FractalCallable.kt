@@ -1,7 +1,6 @@
 package com.example.fractalGenerator.standardPool
 
 import com.example.fractalGenerator.outil.FractalTileProperties
-import com.example.fractalGenerator.outil.isInMandelbrotSet
 import java.awt.Color
 import java.util.concurrent.Callable
 
