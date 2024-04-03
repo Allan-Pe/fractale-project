@@ -45,10 +45,7 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractal
         }
 
         post("/undo") {
-            println("undo called")
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
-            println("IN UNDO ////////////////////////////:")
-            println(fractalProperties)
             val key = cache.changeToKey(fractalProperties)
             val byteArray = cache.get(key)
             call.respondBytes(byteArray!!, ContentType.Image.JPEG)
@@ -56,7 +53,6 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractal
         }
 
         post("/redo") {
-            println("redo called")
             val fractalProperties: FractalProperties = Json.decodeFromString(call.receiveText())
             val key = cache.changeToKey(fractalProperties)
             val byteArray = cache.get(key)
@@ -79,7 +75,6 @@ fun Application.configureRouting(fractalGenerator: FractalGenerator, poolFractal
             )
 
             val jsonStats = Json.encodeToString(responseStats)
-
             call.respondText(jsonStats, ContentType.Application.Json)
         }
 
