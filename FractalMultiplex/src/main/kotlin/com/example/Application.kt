@@ -17,7 +17,7 @@ fun main() {
 }
 
 fun Application.module() {
-    val threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)
+    val threadPool = Executors.newFixedThreadPool(1)
     val poolFractalGenerator = PoolFractalGenerator()
     val fractalGenerator = FractalGenerator(threadPool)
     val historique = HistoryHandler()
