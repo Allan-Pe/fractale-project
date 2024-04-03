@@ -309,7 +309,7 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ position: "relative" }}>
-      {/* <StatsScreen /> */}
+      <StatsScreen />
       <Box
         sx={{
           display: "flex",
