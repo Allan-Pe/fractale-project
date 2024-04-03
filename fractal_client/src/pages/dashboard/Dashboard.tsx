@@ -69,7 +69,6 @@ const Dashboard = () => {
 
   const calculateNewFractalProperties = (value: string) => {
     const movementFactor = 0.2;
-
     setFractalProperties((prevFractalProperties) => {
       const newFractalProperties = {
         ...prevFractalProperties,
@@ -185,22 +184,55 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const handleKeyDown = (event: any) => {
-      calculateNewFractalProperties(event.key);
-    };
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  useEffect(() => {
     setFractalPosition();
   }, [fractalProperties]);
 
   useEffect(() => {
     generateStartFractal();
+  }, []);
+
+  useEffect(() => {
+    let intervalId: number;
+
+    const handleGamepadInput = () => {
+      const gamepads = navigator.getGamepads();
+      const gamepad = gamepads[0];
+
+      if (gamepad!.buttons[0].pressed === true) {
+        calculateNewFractalProperties("a");
+      }
+
+      if (gamepad!.buttons[2].pressed === true) {
+        calculateNewFractalProperties("e");
+      }
+
+      if (gamepad!.buttons[12].pressed === true) {
+        calculateNewFractalProperties("s");
+      }
+
+      if (gamepad!.buttons[13].pressed === true) {
+        calculateNewFractalProperties("z");
+      }
+
+      if (gamepad!.buttons[14].pressed === true) {
+        calculateNewFractalProperties("d");
+      }
+
+      if (gamepad!.buttons[15].pressed === true) {
+        calculateNewFractalProperties("q");
+      }
+    };
+
+    const startCheckingGamepadInput = () => {
+      intervalId = setInterval(handleGamepadInput, 100);
+    };
+
+    window.addEventListener("gamepadconnected", startCheckingGamepadInput);
+
+    return () => {
+      window.removeEventListener("gamepadconnected", startCheckingGamepadInput);
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
