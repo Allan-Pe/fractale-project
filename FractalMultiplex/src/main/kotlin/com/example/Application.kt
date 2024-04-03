@@ -27,3 +27,4 @@ fun Application.module() {
     configureTemplating()
     configureRouting(fractalGenerator, poolFractalGenerator, historique)
 }
+
