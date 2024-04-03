@@ -5,7 +5,7 @@ class FractalStats() {
     var totalTime: Long = 0
     var totalImagesGenerated = 0
     var totalIterations = 0
-    var totalTimeTask: Long = 0
+    var totalTimeTask: Double = 0.0
     var totalTaskGenerated = 0
 
     fun addImage(generationTime: Long, iterations: Int) {
@@ -15,7 +15,7 @@ class FractalStats() {
         totalIterations = iterations
     }
 
-    fun addTask(generationTime: Long) {
+    fun addTask(generationTime: Double) {
         totalTimeTask += generationTime
         totalTaskGenerated++
     }
@@ -24,7 +24,7 @@ class FractalStats() {
         return totalTime / totalImagesGenerated
     }
 
-    fun averageGenerationTimeTask(): Long {
+    fun averageGenerationTimeTask(): Double {
         return totalTimeTask / totalTaskGenerated
     }
 }

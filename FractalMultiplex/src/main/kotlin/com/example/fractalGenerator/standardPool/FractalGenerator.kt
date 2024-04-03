@@ -3,6 +3,8 @@ package com.example.fractalGenerator.standardPool
 import com.example.fractalGenerator.FractalStats
 import com.example.fractalGenerator.outil.FractalProperties
 import com.example.fractalGenerator.outil.FractalTileProperties
+import com.example.fractalGenerator.outil.isInMandelbrotSet
+import com.example.fractalGenerator.outil.juliaColor
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -26,23 +28,16 @@ class FractalGenerator(private val threadPool: ExecutorService) {
             BufferedImage(fractalProperties.width, fractalProperties.height, BufferedImage.TYPE_INT_RGB)
         val fractalTiles = mutableListOf<Future<Color>>()
 
+        val colorFunction: (Double, Double, Int) -> Color = if (isJuliaTrue) {
+            { x, y, maxIterations -> juliaColor(x, y, maxIterations) }
+        } else {
+            { x, y, maxIterations -> isInMandelbrotSet(x, y, maxIterations) }
+        }
+
         for (row in 0 until fractalProperties.width) {
             for (col in 0 until fractalProperties.height) {
-                val startTask = System.currentTimeMillis()
-                val newCallableFractal = if(isJuliaTrue){
-                    FractalCallableJulia(
-                        FractalTileProperties(
-                            row,
-                            col,
-                            fractalProperties.width,
-                            fractalProperties.height,
-                            fractalProperties.centerX,
-                            fractalProperties.centerY,
-                            fractalProperties.scale,
-                            fractalProperties.maxIterations
-                        )
-                    )
-                } else {
+                val startTask = System.nanoTime()
+                val newCallableFractal =
                     FractalCallable(
                         FractalTileProperties(
                             row,
@@ -53,13 +48,13 @@ class FractalGenerator(private val threadPool: ExecutorService) {
                             fractalProperties.centerY,
                             fractalProperties.scale,
                             fractalProperties.maxIterations
-                        )
+                        ),
+                        colorFunction
                     )
-                }
                 val fractalFuture: Future<Color> = threadPool.submit(newCallableFractal)
                 fractalTiles.add(fractalFuture)
-                val endTimeTask = System.currentTimeMillis()
-                val generationTimeTask = endTimeTask - start
+                val endTimeTask = System.nanoTime()
+                val generationTimeTask = (endTimeTask - startTask) / 1000000.0
                 stats.addTask(generationTimeTask)
             }
         }

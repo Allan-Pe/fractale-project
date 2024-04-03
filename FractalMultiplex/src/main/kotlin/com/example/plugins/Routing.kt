@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 data class FractalStatsDto(
     val timeImage: Long,
     val averageTimeImage: Long,
-    val averageTimeTask: Long,
+    val averageTimeTask: Double,
     val iteration: Int
 )
 

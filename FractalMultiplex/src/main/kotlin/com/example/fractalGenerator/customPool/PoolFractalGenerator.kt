@@ -20,7 +20,7 @@ class PoolFractalGenerator {
 
         for (row in 0 until fractalProperties.width) {
             for (col in 0 until fractalProperties.height) {
-                val startTask = System.currentTimeMillis()
+                val startTask = System.nanoTime()
 
 
                 val newCallableFractal = PoolFractalCallable(
@@ -39,8 +39,8 @@ class PoolFractalGenerator {
                 val fractalFuture: Future<Color> = customThreadPool.submit(newCallableFractal)
 
                 fractalTiles.add(fractalFuture)
-                val endTimeTask = System.currentTimeMillis()
-                val generationTimeTask = endTimeTask - start
+                val endTimeTask = System.nanoTime()
+                val generationTimeTask = (endTimeTask - startTask) / 1000000.0
                 stats.addTask(generationTimeTask)
             }
         }
