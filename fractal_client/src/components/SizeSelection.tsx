@@ -128,7 +128,7 @@ export const SizeSelection = ({
           Redo
         </Button>
       </Box>
-      <Box
+      {/* <Box
         className="genericFlexClass"
         sx={{ margin: "2rem", marginTop: "3rem" }}
       >
@@ -148,15 +148,15 @@ export const SizeSelection = ({
         >
           Generate current fractal with custom thread pool
         </Button>
-      </Box>
-      <Box className="genericFlexClass" sx={{ marginTop: "2rem" }}>
+      </Box> */}
+      {/* <Box className="genericFlexClass" sx={{ marginTop: "2rem" }}>
         <Button
           sx={{ color: "white", backgroundColor: "#373330" }}
           onClick={() => handleSaveFractal()}
         >
           Save this fractal
         </Button>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

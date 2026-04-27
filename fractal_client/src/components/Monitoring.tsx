@@ -25,10 +25,13 @@ const StatsScreen = ({}) => {
     }
   };
 
-  setTimeout(getData, 200);
-
   useEffect(() => {
     getData();
+    const intervalId = window.setInterval(getData, 500);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
   }, []);
 
   return (

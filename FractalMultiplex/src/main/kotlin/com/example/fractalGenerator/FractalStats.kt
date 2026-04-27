@@ -21,10 +21,12 @@ class FractalStats() {
     }
 
     fun averageGenerationTime(): Long {
+        if (totalImagesGenerated == 0) return 0
         return totalTime / totalImagesGenerated
     }
 
     fun averageGenerationTimeTask(): Double {
+        if (totalTaskGenerated == 0) return 0.0
         return totalTimeTask / totalTaskGenerated
     }
 }
